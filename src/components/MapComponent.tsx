@@ -1,5 +1,8 @@
 import React, { Component, CSSProperties } from 'react';
+
+
 import GoogleMapReact from 'google-map-react';
+import { MarkerComponent } from './MarkerComponent';
 
 type MapComponentProps = {
   center: any;
@@ -26,7 +29,9 @@ export class MapComponent extends Component<MapComponentProps> {
           bootstrapURLKeys={{ key: googleApiKey }}
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
-        />
+        >
+          <MarkerComponent lat={42.5009918} lng={-83.1977958} />
+        </GoogleMapReact>
       </div>
     );
   }
