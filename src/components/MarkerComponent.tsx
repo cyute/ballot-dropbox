@@ -3,8 +3,8 @@ import { Icon } from '@iconify/react';
 import mapMarker from '@iconify/icons-fa-solid/map-marker-alt';
 
 type MarkerComponentProps = {
-  lat: any;
-  lng: any;
+  lat: number;
+  lng: number;
 }
 
 export class MarkerComponent extends Component<MarkerComponentProps> {
