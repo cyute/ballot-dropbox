@@ -1,12 +1,12 @@
 import React, { Component, CSSProperties } from 'react';
 import GoogleMapReact from 'google-map-react';
 import { MarkerComponent } from './MarkerComponent';
-import { Home } from '../types';
+import { Store } from '../types';
 
 type MapComponentProps = {
   center: any;
   zoom: number;
-  home: Home;
+  store: Store;
 }
 
 export class MapComponent extends Component<MapComponentProps> {
@@ -23,6 +23,7 @@ export class MapComponent extends Component<MapComponentProps> {
       width: '100%',
       position: 'fixed',
     };
+    const { home, targetLocation } = this.props.store;
     return (
       <div style={mapStyle}>
         <GoogleMapReact
@@ -30,7 +31,8 @@ export class MapComponent extends Component<MapComponentProps> {
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
         >
-          {this.props.home && <MarkerComponent lat={this.props.home.lat} lng={this.props.home.lng} />}
+          { home && <MarkerComponent lat={home.lat} lng={home.lng} color='black' />}
+          { targetLocation && <MarkerComponent lat={targetLocation.lat} lng={targetLocation.lng} color='red' />}
         </GoogleMapReact>
       </div>
     );

@@ -3,14 +3,13 @@ import Jumbotron from 'react-bootstrap/Jumbotron';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
-import { Home } from './types';
-import { DropboxLocation } from '../data/types';
-import DropboxLocator from '../data/DropboxLocator';
+import { Home, Store, TargetLocation } from './types';
 import { DropboxLocationsTable } from './DropboxLocationsTable';
 
 type HeroInputContainerProps = {
-  home: Home;
+  store: Store;
   setHome: (home: Home) => void;
+  addLocation: (targetLocation: TargetLocation) => void;
 }
 
 type HeroInputContainerState = {
@@ -47,7 +46,6 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
   }
 
   render() {
-    const dropboxLocations: DropboxLocation[] = this.props.home.city ? DropboxLocator.filterByCityAndState(this.props.home.city, 'MI') : [];
     return (
       <Jumbotron className='mt-2' style={{ backgroundColor: 'white', opacity: .85 }}>
         <h1 className='display-3'>Michigan Ballot Drop Box Locator</h1>
@@ -62,7 +60,7 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
             </Button>
           </InputGroup.Append>
         </InputGroup>
-        <DropboxLocationsTable dropboxLocations={dropboxLocations} />
+        <DropboxLocationsTable dropboxLocations={this.props.store.dropboxLocations} addLocation={this.props.addLocation} />
       </Jumbotron>
     )
   }
