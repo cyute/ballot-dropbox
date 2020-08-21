@@ -1,7 +1,7 @@
 import React, { Component, CSSProperties } from 'react';
 import GoogleMapReact from 'google-map-react';
 import { MarkerComponent } from './MarkerComponent';
-import { Home } from './types';
+import { Home } from '../types';
 
 type MapComponentProps = {
   center: any;

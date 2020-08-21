@@ -1,6 +1,6 @@
 import React, { Component, Props } from 'react';
 import './App.css';
-import { MapComponent } from './components/MapComponent';
+import { MapComponent } from './components/map/MapComponent';
 import { OverlayWrapperComponent } from './components/OverlayWrapperComponent';
 import { HeroInputContainer } from './components/HeroInputContainer';
 import { Home } from './components/types';
