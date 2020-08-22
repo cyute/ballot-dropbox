@@ -7,12 +7,12 @@ export type Store = {
 }
 
 export type TargetLocation = {
-  lat: number;
-  lng: number;
+  lat?: number;
+  lng?: number;
 }
 
 export type Home = {
-  lat: number;
-  lng: number;
+  lat?: number;
+  lng?: number;
   city?: string;
 }

@@ -5,6 +5,8 @@ import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
 import { Home, Store, TargetLocation } from './types';
 import { DropboxLocationsTable } from './DropboxLocationsTable';
+import { Icon } from '@iconify/react';
+import searchIcon from '@iconify/icons-fa-solid/search';
 
 type HeroInputContainerProps = {
   store: Store;
@@ -35,11 +37,11 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
     this.props.setHome(home);
   }
 
-  onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  onAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ address: event.currentTarget.value });
   }
 
-  onKeyPress = (event: React.KeyboardEvent) => {
+  onAddressKeyPress = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       this.geocodeAddress();
     }
@@ -48,19 +50,25 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
   render() {
     return (
       <Jumbotron className='mt-2' style={{ backgroundColor: '#E3D197', opacity: .85 }}>
-        <h1 className='display-3'>Michigan Ballot Drop Box Locator</h1>
-        <p className='lead'>
-          This tool allows you to locate your ballot drop box based on your home address.
-        </p>
+        <h1 className='display-4'>Ballot Drop Box Locator</h1>
         <InputGroup className='mb-3'>
-          <FormControl placeholder='Address' aria-label='Address' aria-describedby='basic-addon1' onChange={this.onChange} onKeyPress={this.onKeyPress} />
+          <FormControl 
+            placeholder='Enter your address or city to locate your ballot drop box.'
+            aria-label='Enter your address or city to locate your ballot drop box.'
+            aria-describedby='basic-addon1'
+            onChange={this.onAddressChange}
+            onKeyPress={this.onAddressKeyPress}
+          />
           <InputGroup.Append>
             <Button onClick={this.geocodeAddress} variant='outline-secondary'>
-              Find Dropbox
+              <Icon icon={searchIcon} /> Find
             </Button>
           </InputGroup.Append>
         </InputGroup>
-        <DropboxLocationsTable dropboxLocations={this.props.store.dropboxLocations} addLocation={this.props.addLocation} />
+        <DropboxLocationsTable 
+          dropboxLocations={this.props.store.dropboxLocations}
+          addLocation={this.props.addLocation}
+        />
       </Jumbotron>
     )
   }

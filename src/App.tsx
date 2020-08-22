@@ -16,8 +16,8 @@ class App extends Component<Props<any>, AppState> {
     super(props);
     this.state = {
       store: {
-        home: { lat: 0, lng: 0 },
-        targetLocation: { lat: 0, lng: 0 },
+        home: {},
+        targetLocation: {},
         dropboxLocations: [],
       }
     }

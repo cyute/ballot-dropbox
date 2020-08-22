@@ -12,7 +12,10 @@ type MapComponentProps = {
 export class MapComponent extends Component<MapComponentProps> {
 
   static defaultProps = {
-    center: { lat: 44.5559883, lng: -86.5639425 },
+    center: {
+      lat: 44.5559883,
+      lng: -86.5639425,
+    },
     zoom: 7.25
   };
 
@@ -23,16 +26,19 @@ export class MapComponent extends Component<MapComponentProps> {
       width: '100%',
       position: 'fixed',
     };
+    const { center, zoom } = this.props;
     const { home, targetLocation } = this.props.store;
     return (
       <div style={mapStyle}>
         <GoogleMapReact
           bootstrapURLKeys={{ key: googleApiKey }}
-          defaultCenter={this.props.center}
-          defaultZoom={this.props.zoom}
+          defaultCenter={center}
+          defaultZoom={zoom}
+          zoom={ (home.lat === undefined) ? zoom : 11 }
+          center={ (home.lat === undefined) ? center : { lat: home.lat, lng: home.lng } }
         >
-          { home && <MarkerComponent lat={home.lat} lng={home.lng} color='black' />}
-          { targetLocation && <MarkerComponent lat={targetLocation.lat} lng={targetLocation.lng} color='red' />}
+          { home && home.lat && home.lng && <MarkerComponent lat={home.lat} lng={home.lng} color='black' />}
+          { targetLocation && targetLocation.lat && targetLocation.lng && <MarkerComponent lat={targetLocation.lat} lng={targetLocation.lng} color='red' />}
         </GoogleMapReact>
       </div>
     );
