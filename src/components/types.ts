@@ -4,6 +4,11 @@ export type Store = {
   home: Home;
   targetLocation: TargetLocation;
   dropboxLocations: DropboxLocation[];
+  center?: {
+    lat: number;
+    lng: number;
+  };
+  zoom?: number;
 }
 
 export type TargetLocation = {

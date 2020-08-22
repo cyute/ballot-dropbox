@@ -27,6 +27,10 @@ class App extends Component<Props<any>, AppState> {
     const store = this.state.store;
     store.home = home;
     store.dropboxLocations = home.city ? DropboxLocator.filterByCityAndState(home.city, 'MI') : [];
+    if (home.lat && home.lng) {
+      store.center = { lat: home.lat, lng: home.lng };
+      store.zoom = 11;
+    }
     this.setState({ store });
   }
 
