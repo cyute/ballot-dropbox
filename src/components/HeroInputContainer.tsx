@@ -47,7 +47,7 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
 
   render() {
     return (
-      <Jumbotron className='mt-2' style={{ backgroundColor: 'white', opacity: .85 }}>
+      <Jumbotron className='mt-2' style={{ backgroundColor: '#E3D197', opacity: .85 }}>
         <h1 className='display-3'>Michigan Ballot Drop Box Locator</h1>
         <p className='lead'>
           This tool allows you to locate your ballot drop box based on your home address.

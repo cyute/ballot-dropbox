@@ -47,7 +47,7 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps>
       return React.Fragment;
     }
     return (
-      <Table hover size='sm' style={{ fontSize: '.85em' }}>
+      <Table variant='dark' hover size='sm' style={{ fontSize: '.85em' }}>
         <thead>
           <tr style={{fontWeight: 600}}>
             <th>Jurisdiction</th>
