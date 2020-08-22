@@ -7,6 +7,8 @@ import { Home, Store, TargetLocation } from './types';
 import { DropboxLocationsTable } from './DropboxLocationsTable';
 import { Icon } from '@iconify/react';
 import searchIcon from '@iconify/icons-fa-solid/search';
+import compressIcon from '@iconify/icons-fa-solid/compress';
+import expandIcon from '@iconify/icons-fa-solid/expand';
 
 type HeroInputContainerProps = {
   store: Store;
@@ -16,9 +18,15 @@ type HeroInputContainerProps = {
 
 type HeroInputContainerState = {
   address: string;
+  isVerbose: boolean;
 }
 
 export class HeroInputContainer extends Component<HeroInputContainerProps, HeroInputContainerState> {
+
+  public readonly state: Readonly<HeroInputContainerState> = {
+    address: '',
+    isVerbose: true
+  };
 
   geocodeAddress = () => {
     const geocoder = new google.maps.Geocoder();
@@ -47,7 +55,11 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
     }
   }
 
-  render() {
+  toggleDisplay = () => {
+    this.setState({ isVerbose: !this.state.isVerbose })
+  }
+
+  renderVerboseDisplay = (): JSX.Element => {
     return (
       <Jumbotron className='mt-2' style={{ backgroundColor: '#E3D197', opacity: .85 }}>
         <h1 className='display-4'>Ballot Drop Box Locator</h1>
@@ -60,8 +72,13 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
             onKeyPress={this.onAddressKeyPress}
           />
           <InputGroup.Append>
-            <Button onClick={this.geocodeAddress} variant='outline-secondary'>
+            <Button onClick={this.geocodeAddress} variant='outline-dark'>
               <Icon icon={searchIcon} /> Find
+            </Button>
+          </InputGroup.Append>
+          <InputGroup.Append>
+            <Button onClick={this.toggleDisplay} variant='outline-dark'>
+              <Icon icon={compressIcon} /> Collapse
             </Button>
           </InputGroup.Append>
         </InputGroup>
@@ -70,6 +87,18 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
           addLocation={this.props.addLocation}
         />
       </Jumbotron>
-    )
+    );
+  }
+
+  renderConciseDisplay = (): JSX.Element => {
+    return (
+      <Button className='mt-2' variant='dark' onClick={this.toggleDisplay}>
+        <Icon icon={expandIcon} /> Expand
+      </Button>
+    );
+  }
+
+  render() {
+    return this.state.isVerbose ? this.renderVerboseDisplay() : this.renderConciseDisplay()
   }
 }
