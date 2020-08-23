@@ -3,7 +3,7 @@ import './App.css';
 import { MapComponent } from './components/map/MapComponent';
 import { OverlayWrapperComponent } from './components/OverlayWrapperComponent';
 import { HeroInputContainer } from './components/HeroInputContainer';
-import { Home, Store, TargetLocation } from './components/types';
+import { Home, Store, Destination } from './components/types';
 import DropboxLocator from './data/DropboxLocator';
 
 type AppState = {
@@ -16,9 +16,8 @@ class App extends Component<Props<any>, AppState> {
     super(props);
     this.state = {
       store: {
-        home: {},
-        targetLocation: {},
         dropboxLocations: [],
+        destinations: [],
       }
     }
   }
@@ -27,16 +26,16 @@ class App extends Component<Props<any>, AppState> {
     const store = this.state.store;
     store.home = home;
     store.dropboxLocations = home.city ? DropboxLocator.filterByCityAndState(home.city, 'MI') : [];
-    if (home.lat && home.lng) {
-      store.center = { lat: home.lat, lng: home.lng };
+    if (home.location) {
+      store.center = { lat: home.location.lat, lng: home.location.lng };
       store.zoom = 11;
     }
     this.setState({ store });
   }
 
-  addLocation = (targetLocation: TargetLocation) => {
+  addDestination = (destination: Destination) => {
     const store = this.state.store;
-    store.targetLocation = targetLocation;
+    store.destinations.push(destination);
     this.setState({ store });
   }
 
@@ -45,7 +44,7 @@ class App extends Component<Props<any>, AppState> {
       <React.Fragment>
         <MapComponent store={this.state.store} />
         <OverlayWrapperComponent>
-          <HeroInputContainer store={this.state.store} setHome={this.setHome} addLocation={this.addLocation} />
+          <HeroInputContainer store={this.state.store} setHome={this.setHome} addDestination={this.addDestination} />
         </OverlayWrapperComponent>
       </React.Fragment>
     );

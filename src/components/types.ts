@@ -1,23 +1,19 @@
 import { DropboxLocation } from "../data/types"
 
 export type Store = {
-  home: Home;
-  targetLocation: TargetLocation;
+  home?: Home;
+  destinations: Destination[];
   dropboxLocations: DropboxLocation[];
-  center?: {
-    lat: number;
-    lng: number;
-  };
+  center?: google.maps.LatLngLiteral;
   zoom?: number;
 }
 
-export type TargetLocation = {
-  lat?: number;
-  lng?: number;
+export type Destination = {
+  address: string;
+  location: google.maps.LatLngLiteral;
 }
 
 export type Home = {
-  lat?: number;
-  lng?: number;
-  city?: string;
+  city: string;
+  location: google.maps.LatLngLiteral;
 }

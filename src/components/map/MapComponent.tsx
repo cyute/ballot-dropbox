@@ -1,17 +1,14 @@
 import React, { Component, CSSProperties } from 'react';
 import GoogleMapReact from 'google-map-react';
 import { MarkerComponent } from './MarkerComponent';
-import { Store } from '../types';
+import { Store, Destination } from '../types';
 
 type MapComponentProps = {
   store: Store;
 }
 
 type MapComponentState = {
-  defaultCenter: {
-    lat: number,
-    lng: number,
-  };
+  defaultCenter: google.maps.LatLngLiteral;
   defaultZoom: number;
 }
 
@@ -27,6 +24,12 @@ export class MapComponent extends Component<MapComponentProps, MapComponentState
 
   private googleApiKey: string = process.env['REACT_APP_GOOGLE_API_KEY'] || '';
 
+  renderDestinationMarker = (destination: Destination) => {
+    return (
+      <MarkerComponent lat={destination.location.lat} lng={destination.location.lng} color='green' />
+    )
+  }
+
   render() {
     const mapStyle: CSSProperties = {
       height: '100vh',
@@ -34,7 +37,7 @@ export class MapComponent extends Component<MapComponentProps, MapComponentState
       position: 'fixed',
     };
     const { defaultCenter, defaultZoom } = this.state;
-    const { home, targetLocation, center, zoom } = this.props.store;
+    const { home, destinations, center, zoom } = this.props.store;
     return (
       <div style={mapStyle}>
         <GoogleMapReact
@@ -44,8 +47,8 @@ export class MapComponent extends Component<MapComponentProps, MapComponentState
           zoom={zoom ? zoom : defaultZoom }
           center={center}
         >
-          { home && home.lat && home.lng && <MarkerComponent lat={home.lat} lng={home.lng} color='black' />}
-          { targetLocation && targetLocation.lat && targetLocation.lng && <MarkerComponent lat={targetLocation.lat} lng={targetLocation.lng} color='green' />}
+          { home && home.location && <MarkerComponent lat={home.location.lat} lng={home.location.lng} color='black' />}
+          { destinations.map(destination => this.renderDestinationMarker(destination)) }
         </GoogleMapReact>
       </div>
     );

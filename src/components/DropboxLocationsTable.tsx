@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { DropboxLocation } from '../data/types';
 import Table from 'react-bootstrap/Table';
+import { Destination } from './types';
 
 type DropboxLocationsTableProps = {
   dropboxLocations: DropboxLocation[];
-  addLocation: any; // TODO: fix type
+  addDestination: (destination: Destination) => void;
 }
 
 export class DropboxLocationsTable extends Component<DropboxLocationsTableProps> {
@@ -19,13 +20,19 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps>
   handleGeocodeResults = (results: google.maps.GeocoderResult[], status: google.maps.GeocoderStatus) => {
     console.log('results', results);
     const city = results[0].address_components.find(component => component.types.includes('locality'))?.long_name;
-    const location = results[0].geometry.location;
-    const dropboxLocation = {
-      lat: location.lat(),
-      lng: location.lng(),
-      city,
-    };
-    this.props.addLocation(dropboxLocation);
+    if (city) {
+      const location = results[0].geometry.location;
+      const dropboxLocation = {
+        address: 'Address',
+        location: {
+          lat: location.lat(),
+          lng: location.lng(),
+        },
+      };
+      this.props.addDestination(dropboxLocation);
+    } else {
+      console.error('No results found.'); // TODO: create visual error
+    }
   }
 
   renderRow = (location: DropboxLocation, index: number) => {
@@ -33,8 +40,7 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps>
       <tr key={index} onClick={(event) => this.geocodeAddress(location)}>
         <td>{ location.jurisdiction }</td>
         <td>{ location.address }</td>
-        <td>{ location.city } </td>
-        <td>{ location.isOutdoors ? 'Outdoors' : 'Indoors' }</td>
+        <td>{ location.isOutdoors ? 'Yes' : 'No' }</td>
         <td>{ location.dropoffHours }</td>
         <td>{ location.comments }</td>
       </tr>
@@ -47,21 +53,25 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps>
       return React.Fragment;
     }
     return (
-      <Table variant='dark' hover size='sm' style={{ fontSize: '.85em' }}>
-        <thead>
-          <tr style={{fontWeight: 600}}>
-            <th>Jurisdiction</th>
-            <th>Address</th>
-            <th>City</th>
-            <th>Outdoors?</th>
-            <th>Dropoff hours</th>
-            <th>Comments</th>
-          </tr>
-        </thead>
-        <tbody style={{fontWeight: 300}}>
-          { dropboxLocations.map((location, index) => this.renderRow(location, index)) }
-        </tbody>
-      </Table>
+      <div className='table-responsive'>
+        <p className='lead'>
+          <strong>City:</strong> { dropboxLocations[0].city }
+        </p>
+        <Table variant='dark' hover size='sm' style={{ fontSize: '.85em' }}>
+          <thead>
+            <tr style={{fontWeight: 600}}>
+              <th>Jurisdiction</th>
+              <th>Address</th>
+              <th>Outdoors?</th>
+              <th>Hours</th>
+              <th>Comments</th>
+            </tr>
+          </thead>
+          <tbody style={{fontWeight: 300}}>
+            { dropboxLocations.map((location, index) => this.renderRow(location, index)) }
+          </tbody>
+        </Table>
+      </div>
     );
   }
 }
