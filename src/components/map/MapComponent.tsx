@@ -1,7 +1,7 @@
 import React, { Component, CSSProperties } from 'react';
 import GoogleMapReact from 'google-map-react';
 import { MarkerComponent } from './MarkerComponent';
-import { Store, Destination } from '../types';
+import { Store, Destination, Home } from '../types';
 
 type MapComponentProps = {
   store: Store;
@@ -24,9 +24,24 @@ export class MapComponent extends Component<MapComponentProps, MapComponentState
 
   private googleApiKey: string = process.env['REACT_APP_GOOGLE_API_KEY'] || '';
 
-  renderDestinationMarker = (destination: Destination) => {
+  renderDestinationMarker = (destination: Destination, index: number) => {
     return (
-      <MarkerComponent lat={destination.location.lat} lng={destination.location.lng} color='green' />
+      <MarkerComponent
+        key={index}
+        lat={destination.location.lat}
+        lng={destination.location.lng}
+        color='green'
+        label={destination.address} />
+    )
+  }
+
+  renderHomeMarker = (home: Home) => {
+    return (
+      <MarkerComponent
+        lat={home.location.lat}
+        lng={home.location.lng}
+        color='black'
+        label={home.address} />
     )
   }
 
@@ -44,11 +59,11 @@ export class MapComponent extends Component<MapComponentProps, MapComponentState
           bootstrapURLKeys={{ key: this.googleApiKey }}
           defaultCenter={defaultCenter}
           defaultZoom={defaultZoom}
-          zoom={zoom ? zoom : defaultZoom }
+          zoom={zoom ? zoom : defaultZoom}
           center={center}
         >
-          { home && home.location && <MarkerComponent lat={home.location.lat} lng={home.location.lng} color='black' />}
-          { destinations.map(destination => this.renderDestinationMarker(destination)) }
+          {home && home.location && this.renderHomeMarker(home)}
+          {destinations.map((destination, index) => this.renderDestinationMarker(destination, index))}
         </GoogleMapReact>
       </div>
     );

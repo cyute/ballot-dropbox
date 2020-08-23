@@ -39,11 +39,12 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
     if (city) {
       const location = results[0].geometry.location;
       const home = {
+        address: results[0].formatted_address,
+        city,
         location: {
           lat: location.lat(),
           lng: location.lng(),
         },
-        city,
       };
       this.props.setHome(home);
     } else {
@@ -70,7 +71,7 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
       <Jumbotron className='mt-2' style={{ backgroundColor: '#E3D197', opacity: .85 }}>
         <h1 className='display-4'>Ballot Drop Box Locator</h1>
         <InputGroup className='mb-3'>
-          <FormControl 
+          <FormControl
             placeholder='Enter street address or city.'
             aria-label='Enter street address or city.'
             aria-describedby='basic-addon1'
@@ -88,7 +89,7 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
             </Button>
           </InputGroup.Append>
         </InputGroup>
-        <DropboxLocationsTable 
+        <DropboxLocationsTable
           dropboxLocations={this.props.store.dropboxLocations}
           addDestination={this.props.addDestination}
         />

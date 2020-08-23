@@ -23,7 +23,7 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps>
     if (city) {
       const location = results[0].geometry.location;
       const dropboxLocation = {
-        address: 'Address',
+        address: results[0].formatted_address,
         location: {
           lat: location.lat(),
           lng: location.lng(),
@@ -38,11 +38,11 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps>
   renderRow = (location: DropboxLocation, index: number) => {
     return (
       <tr key={index} onClick={(event) => this.geocodeAddress(location)}>
-        <td>{ location.jurisdiction }</td>
-        <td>{ location.address }</td>
-        <td>{ location.isOutdoors ? 'Yes' : 'No' }</td>
-        <td>{ location.dropoffHours }</td>
-        <td>{ location.comments }</td>
+        <td>{location.jurisdiction}</td>
+        <td>{location.address}</td>
+        <td>{location.isOutdoors ? 'Yes' : 'No'}</td>
+        <td>{location.dropoffHours}</td>
+        <td>{location.comments}</td>
       </tr>
     )
   }
@@ -55,11 +55,11 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps>
     return (
       <div className='table-responsive'>
         <p className='lead'>
-          <strong>City:</strong> { dropboxLocations[0].city }
+          <strong>City:</strong> {dropboxLocations[0].city}
         </p>
         <Table variant='dark' hover size='sm' style={{ fontSize: '.85em' }}>
           <thead>
-            <tr style={{fontWeight: 600}}>
+            <tr style={{ fontWeight: 600 }}>
               <th>Jurisdiction</th>
               <th>Address</th>
               <th>Outdoors?</th>
@@ -67,8 +67,8 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps>
               <th>Comments</th>
             </tr>
           </thead>
-          <tbody style={{fontWeight: 300}}>
-            { dropboxLocations.map((location, index) => this.renderRow(location, index)) }
+          <tbody style={{ fontWeight: 300 }}>
+            {dropboxLocations.map((location, index) => this.renderRow(location, index))}
           </tbody>
         </Table>
       </div>
