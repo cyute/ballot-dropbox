@@ -6,6 +6,7 @@ export type Store = {
   dropboxLocations: DropboxLocation[];
   center?: google.maps.LatLngLiteral;
   zoom?: number;
+  isHeroContainerOpen: boolean;
 }
 
 export type Destination = {

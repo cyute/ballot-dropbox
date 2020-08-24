@@ -7,8 +7,6 @@ import { Home, Store, Destination } from './types';
 import { DropboxLocationsTable } from './DropboxLocationsTable';
 import { Icon } from '@iconify/react';
 import searchIcon from '@iconify/icons-fa-solid/search';
-import compressIcon from '@iconify/icons-fa-solid/compress';
-import expandIcon from '@iconify/icons-fa-solid/expand';
 
 type HeroInputContainerProps = {
   store: Store;
@@ -18,14 +16,12 @@ type HeroInputContainerProps = {
 
 type HeroInputContainerState = {
   address: string;
-  isVerbose: boolean;
 }
 
 export class HeroInputContainer extends Component<HeroInputContainerProps, HeroInputContainerState> {
 
   public readonly state: Readonly<HeroInputContainerState> = {
     address: '',
-    isVerbose: true
   };
 
   geocodeAddress = () => {
@@ -62,14 +58,11 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
     }
   }
 
-  toggleDisplay = () => {
-    this.setState({ isVerbose: !this.state.isVerbose })
-  }
-
-  renderVerboseDisplay = (): JSX.Element => {
+  renderHero = (): JSX.Element => {
     return (
       <Jumbotron className='mt-2' style={{ backgroundColor: '#E3D197', opacity: .85 }}>
-        <h1 className='display-4'>Ballot Drop Box Locator</h1>
+        <h1 className='d-none d-sm-block display-4'>Ballot Drop Box Locator</h1>
+        <h1 style={{ fontSize: '2em' }} className='d-block d-sm-none display-4'>Ballot Drop Box Locator</h1>
         <InputGroup className='mb-3'>
           <FormControl
             placeholder='Enter street address or city.'
@@ -80,12 +73,8 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
           />
           <InputGroup.Append>
             <Button onClick={this.geocodeAddress} variant='outline-dark'>
-              <Icon icon={searchIcon} /> Find
-            </Button>
-          </InputGroup.Append>
-          <InputGroup.Append>
-            <Button onClick={this.toggleDisplay} variant='outline-dark'>
-              <Icon icon={compressIcon} /> Collapse
+              <Icon icon={searchIcon} />
+              <span className='d-none d-sm-inline ml-1'>Find</span>
             </Button>
           </InputGroup.Append>
         </InputGroup>
@@ -97,15 +86,7 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
     );
   }
 
-  renderConciseDisplay = (): JSX.Element => {
-    return (
-      <Button className='mt-2' variant='dark' onClick={this.toggleDisplay}>
-        <Icon icon={expandIcon} /> Expand
-      </Button>
-    );
-  }
-
   render() {
-    return this.state.isVerbose ? this.renderVerboseDisplay() : this.renderConciseDisplay()
+    return this.renderHero();
   }
 }
