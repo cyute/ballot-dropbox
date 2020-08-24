@@ -62,7 +62,7 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
     return (
       <Jumbotron className='mt-2' style={{ backgroundColor: '#E3D197', opacity: .85 }}>
         <h1 className='d-none d-sm-block display-4'>Ballot Drop Box Locator</h1>
-        <h1 style={{ fontSize: '2em' }} className='d-block d-sm-none display-4'>Ballot Drop Box Locator</h1>
+        <h1 style={{ fontSize: '1.75em' }} className='d-block d-sm-none display-4'>Ballot Drop Box Locator</h1>
         <InputGroup className='mb-3'>
           <FormControl
             placeholder='Enter street address or city.'
