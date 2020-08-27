@@ -20,7 +20,7 @@ export class Comment extends Component<CommentProps> {
         <Popover.Title as='h3'>{ address }</Popover.Title>
         <Popover.Content>
           { isOutdoors ? 'Outdoor' : 'Indoor' } dropbox is available { dropoffHours }
-          { comments && ` Comments: ${ comments }` }
+          <br/>{ comments }
         </Popover.Content>
       </Popover>
     )
@@ -32,7 +32,7 @@ export class Comment extends Component<CommentProps> {
       <div>
         <span className='d-none d-sm-inline'>
           { isOutdoors ? 'Outdoor' : 'Indoor' } dropbox is available { dropoffHours }
-          { comments && ` Comments: ${ comments }` }
+          <br/>{ comments }
         </span>
         <div className='d-block d-sm-none text-center'>
           <OverlayTrigger trigger='click' placement='left' overlay={ this.popover() }>

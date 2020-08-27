@@ -92,12 +92,28 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps,
     }
     return (
       <div className='table-responsive'>
-        <p className='lead'>
-          <strong>City:</strong> {dropboxLocations[0].city}
-        </p>
-        <Form.Check inline label='outdoors' type='checkbox' id={`inline-radio-1`} checked={ this.state.isOutdoorsOnly } onChange={this.toggleOutdoors}/>
-        <Form.Check inline label='open 24/7' type='checkbox' id={`inline-radio-2`} checked={ this.state.isOpen24Hours } onChange={this.toggle24Hours}/>
-        <Table variant='dark' hover size='sm' style={{ fontSize: '.95em' }}>
+        <div className='float-left'>
+          <p className='lead mb-1'>
+           { dropboxLocations[0].city }, MI
+          </p>
+        </div>
+        <div className='float-right' style={{ lineHeight: '2rem', fontWeight: 200 }}>
+          <Form.Check inline 
+            label='outdoors'
+            type='checkbox' 
+            id={`inline-radio-1`}
+            checked={ this.state.isOutdoorsOnly }
+            onChange={this.toggleOutdoors}
+          />
+          <Form.Check inline
+            label='24/7'
+            type='checkbox'
+            id={`inline-radio-2`}
+            checked={ this.state.isOpen24Hours } 
+            onChange={this.toggle24Hours}
+          />
+        </div>
+        <Table className='mb-0' variant='dark' hover size='sm' style={{ fontSize: '.85em' }}>
           <thead>
             <tr style={{ fontWeight: 600 }}>
               <th>Jurisdiction</th>
@@ -109,6 +125,11 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps,
             {dropboxLocations.map((location, index) => this.renderRow(location, index))}
           </tbody>
         </Table>
+        <small>
+          <a href='https://www.michigan.gov/documents/sos/Ballot_Dropbox_Locations_697191_7.pdf' target='_blank' rel='noopener noreferrer'>
+            <sup>*</sup>data sourced from www.michigan.gov
+          </a>
+        </small>
       </div>
     );
   }

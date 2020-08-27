@@ -46,6 +46,7 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
         },
       };
       this.props.setHome(home);
+      this.setState({ address: '' })
     } else {
       console.error('No results found.'); // TODO: create visual error
     }
@@ -76,9 +77,10 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
         { this.renderTitle() }
         <InputGroup className='mb-3'>
           <FormControl
-            placeholder='Enter street address or city.'
-            aria-label='Enter street address or city.'
+            placeholder='Street address and/or city'
+            aria-label='Street address and/or city'
             aria-describedby='basic-addon1'
+            value={this.state.address}
             onChange={this.onAddressChange}
             onKeyPress={this.onAddressKeyPress}
           />

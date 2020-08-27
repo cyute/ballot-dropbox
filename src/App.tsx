@@ -36,6 +36,7 @@ class App extends Component<Props<any>, AppState> {
   setHome = (home: Home) => {
     const store = this.state.store;
     store.home = home;
+    store.destinations = [];
     store.dropboxLocations = home.city ? DropboxLocator.filterByCityAndState(home.city, 'MI') : [];
     if (home.location) {
       store.center = { lat: home.location.lat, lng: home.location.lng };
@@ -62,7 +63,7 @@ class App extends Component<Props<any>, AppState> {
   renderHeroExpandButton = (): JSX.Element => {
     return (
       <Button className='mt-3' variant='dark' size='sm' onClick={this.toggleDisplay}>
-         <Icon icon={searchLocationIcon} /> Open Locator Search
+         <Icon icon={searchLocationIcon} /> Open Dropbox Locator
       </Button>
     );
   }
