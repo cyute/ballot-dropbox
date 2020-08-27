@@ -1,14 +1,34 @@
 import React, { Component } from 'react';
-import { DropboxLocation } from '../data/types';
+import { DropboxLocation } from '../../data/types';
 import Table from 'react-bootstrap/Table';
-import { Destination } from './types';
+import Form from 'react-bootstrap/Form';
+import { Destination } from '../types';
+import { Comment } from './Comment';
 
 type DropboxLocationsTableProps = {
   dropboxLocations: DropboxLocation[];
   addDestination: (destination: Destination) => void;
 }
 
-export class DropboxLocationsTable extends Component<DropboxLocationsTableProps> {
+type DropboxLocationsTableState = {
+  isOutdoorsOnly: boolean;
+  isOpen24Hours: boolean;
+}
+
+export class DropboxLocationsTable extends Component<DropboxLocationsTableProps, DropboxLocationsTableState> {
+
+  public readonly state: Readonly<DropboxLocationsTableState> = {
+    isOutdoorsOnly: false,
+    isOpen24Hours: false,
+  };
+
+  toggleOutdoors = () => {
+    this.setState({ isOutdoorsOnly: !this.state.isOutdoorsOnly });
+  }
+
+  toggle24Hours = () => {
+    this.setState({ isOpen24Hours: !this.state.isOpen24Hours });
+  }
 
   // TODO: make geocoder class to DRY up code
   geocodeAddress = (location: DropboxLocation) => {
@@ -36,19 +56,37 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps>
   }
 
   renderRow = (location: DropboxLocation, index: number) => {
+    const { address, comments, jurisdiction, isOutdoors, dropoffHours } = location;
     return (
       <tr key={index} onClick={(event) => this.geocodeAddress(location)}>
-        <td>{location.jurisdiction}</td>
-        <td>{location.address}</td>
-        <td>{location.isOutdoors ? 'Yes' : 'No'}</td>
-        <td>{location.dropoffHours}</td>
-        <td>{location.comments}</td>
+        <td>{jurisdiction}</td>
+        <td>{address}</td>
+        <td>
+          <Comment 
+            address={address}
+            isOutdoors={isOutdoors}
+            dropoffHours={dropoffHours}
+            comments={comments}
+          />
+        </td>
       </tr>
     )
   }
 
+  getDropboxLocations = (): DropboxLocation[] => {
+    return this.props.dropboxLocations.filter(location => {
+      if (this.state.isOutdoorsOnly && !location.isOutdoors) {
+        return false;
+      }
+      if (this.state.isOpen24Hours && location.dropoffHours !== '24/7') {
+        return false;
+      }
+      return true;
+    });
+  }
+
   render() {
-    const { dropboxLocations } = this.props;
+    const dropboxLocations = this.getDropboxLocations();
     if (dropboxLocations.length === 0) {
       return React.Fragment;
     }
@@ -57,14 +95,14 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps>
         <p className='lead'>
           <strong>City:</strong> {dropboxLocations[0].city}
         </p>
-        <Table variant='dark' hover size='sm' style={{ fontSize: '.85em' }}>
+        <Form.Check inline label='outdoors' type='checkbox' id={`inline-radio-1`} checked={ this.state.isOutdoorsOnly } onChange={this.toggleOutdoors}/>
+        <Form.Check inline label='open 24/7' type='checkbox' id={`inline-radio-2`} checked={ this.state.isOpen24Hours } onChange={this.toggle24Hours}/>
+        <Table variant='dark' hover size='sm' style={{ fontSize: '.95em' }}>
           <thead>
             <tr style={{ fontWeight: 600 }}>
               <th>Jurisdiction</th>
               <th>Address</th>
-              <th>Outdoors?</th>
-              <th>Hours</th>
-              <th>Comments</th>
+              <th>Info</th>
             </tr>
           </thead>
           <tbody style={{ fontWeight: 300 }}>

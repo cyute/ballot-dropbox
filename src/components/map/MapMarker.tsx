@@ -3,14 +3,14 @@ import Card from 'react-bootstrap/Card';
 import { Icon } from '@iconify/react';
 import mapMarker from '@iconify/icons-fa-solid/map-marker-alt';
 
-type MarkerComponentProps = {
+type MapMarkerProps = {
   lat: number;
   lng: number;
   color: string;
   label?: string
 }
 
-export class MarkerComponent extends Component<MarkerComponentProps> {
+export class MapMarker extends Component<MapMarkerProps> {
 
   render() {
     const { color, label } = this.props;

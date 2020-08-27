@@ -1,32 +1,32 @@
 import React, { Component, CSSProperties } from 'react';
 import GoogleMapReact from 'google-map-react';
-import { MarkerComponent } from './MarkerComponent';
+import { MapMarker } from './MapMarker';
 import { Store, Destination, Home } from '../types';
 
-type MapComponentProps = {
+type MapProps = {
   store: Store;
 }
 
-type MapComponentState = {
+type MapState = {
   defaultCenter: google.maps.LatLngLiteral;
   defaultZoom: number;
 }
 
-export class MapComponent extends Component<MapComponentProps, MapComponentState> {
+export class MapComponent extends Component<MapProps, MapState> {
 
-  public readonly state: Readonly<MapComponentState> = {
+  public readonly state: Readonly<MapState> = {
     defaultCenter: {
-      lat: 44.5559883,
-      lng: -86.5639425,
+      lat: 44.6254027,
+      lng: -84.9069361,
     },
-    defaultZoom: 7.25,
+    defaultZoom: 6,
   };
 
   private googleApiKey: string = process.env['REACT_APP_GOOGLE_API_KEY'] || '';
 
   renderDestinationMarker = (destination: Destination, index: number) => {
     return (
-      <MarkerComponent
+      <MapMarker
         key={index}
         lat={destination.location.lat}
         lng={destination.location.lng}
@@ -37,7 +37,7 @@ export class MapComponent extends Component<MapComponentProps, MapComponentState
 
   renderHomeMarker = (home: Home) => {
     return (
-      <MarkerComponent
+      <MapMarker
         lat={home.location.lat}
         lng={home.location.lng}
         color='black'

@@ -3,8 +3,10 @@ import Jumbotron from 'react-bootstrap/Jumbotron';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
 import { Home, Store, Destination } from './types';
-import { DropboxLocationsTable } from './DropboxLocationsTable';
+import { DropboxLocationsTable } from './table/DropboxLocationsTable';
 import { Icon } from '@iconify/react';
 import searchIcon from '@iconify/icons-fa-solid/search';
 
@@ -26,7 +28,8 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
 
   geocodeAddress = () => {
     const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ address: this.state.address }, this.handleGeocodeResults);
+    const address = `${this.state.address}, MI`;
+    geocoder.geocode({ address }, this.handleGeocodeResults);
   }
 
   handleGeocodeResults = (results: google.maps.GeocoderResult[], status: google.maps.GeocoderStatus) => {
@@ -58,11 +61,19 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
     }
   }
 
-  renderHero = (): JSX.Element => {
+  renderTitle = (): JSX.Element => {
     return (
-      <Jumbotron className='mt-2' style={{ backgroundColor: '#E3D197', opacity: .85 }}>
+      <React.Fragment>
         <h1 className='d-none d-sm-block display-4'>Ballot Drop Box Locator</h1>
         <h1 style={{ fontSize: '1.75em' }} className='d-block d-sm-none display-4'>Ballot Drop Box Locator</h1>
+      </React.Fragment>
+    )
+  }
+
+  render = (): JSX.Element => {
+    return (
+      <Jumbotron className='mt-2' style={{ backgroundColor: '#E3D197', opacity: .9 }}>
+        { this.renderTitle() }
         <InputGroup className='mb-3'>
           <FormControl
             placeholder='Enter street address or city.'
@@ -71,6 +82,15 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
             onChange={this.onAddressChange}
             onKeyPress={this.onAddressKeyPress}
           />
+          <DropdownButton
+            as={InputGroup.Append}
+            variant='outline-dark'
+            title='MI'
+            id='input-group-dropdown-2'
+          >
+            <Dropdown.Header>States</Dropdown.Header>
+            <Dropdown.Item href='#'>MI</Dropdown.Item>
+          </DropdownButton>
           <InputGroup.Append>
             <Button onClick={this.geocodeAddress} variant='outline-dark'>
               <Icon icon={searchIcon} />
@@ -84,9 +104,5 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
         />
       </Jumbotron>
     );
-  }
-
-  render() {
-    return this.renderHero();
   }
 }

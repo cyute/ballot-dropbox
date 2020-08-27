@@ -1,7 +1,7 @@
-import React, { Component, Props } from 'react';
+import React, { Component, Props, CSSProperties } from 'react';
 import './App.css';
-import { MapComponent } from './components/map/MapComponent';
-import { OverlayWrapperComponent } from './components/OverlayWrapperComponent';
+import { MapComponent } from './components/map/Map';
+import { OverlayWrapper } from './components/OverlayWrapper';
 import { HeroInputContainer } from './components/HeroInputContainer';
 import { Home, Store, Destination } from './components/types';
 import DropboxLocator from './data/DropboxLocator';
@@ -51,9 +51,10 @@ class App extends Component<Props<any>, AppState> {
   }
   
   renderHeroCollapseButton = (): JSX.Element => {
+    const style: CSSProperties = { cursor: 'pointer', fontSize: '1.25rem', color: '#333333' };
     return (
       <div onClick={this.toggleDisplay}>
-        <Icon style={{ cursor: 'pointer', fontSize: '1.25rem', color: '#333333' }} className='mt-3 mr-2 float-right' icon={closeIcon} /> 
+        <Icon style={style} className='mt-3 mr-2 float-right' icon={closeIcon} /> 
       </div>
     );
   }
@@ -66,18 +67,28 @@ class App extends Component<Props<any>, AppState> {
     );
   }
 
+  renderHero = (): JSX.Element => {
+    return (
+      <HeroInputContainer 
+        store={this.state.store}
+        setHome={this.setHome}
+        addDestination={this.addDestination}
+      />
+    )
+  }
+
   render() {
     const { isHeroContainerOpen } = this.state.store;
     return (
       <React.Fragment>
         <MapComponent store={this.state.store} />
-        <OverlayWrapperComponent>
-          { isHeroContainerOpen && <HeroInputContainer store={this.state.store} setHome={this.setHome} addDestination={this.addDestination} /> }
-        </OverlayWrapperComponent>
-        <OverlayWrapperComponent>
+        <OverlayWrapper>
+          { isHeroContainerOpen && this.renderHero() }
+        </OverlayWrapper>
+        <OverlayWrapper>
           { isHeroContainerOpen && this.renderHeroCollapseButton() }
           { !isHeroContainerOpen && this.renderHeroExpandButton() }
-        </OverlayWrapperComponent>
+        </OverlayWrapper>
       </React.Fragment>
     );
   }
