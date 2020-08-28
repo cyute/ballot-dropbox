@@ -6,6 +6,7 @@ import { HeroInputContainer } from './components/HeroInputContainer';
 import { Home, Store, Destination } from './components/types';
 import DropboxLocator from './data/DropboxLocator';
 import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
 import { Icon } from '@iconify/react';
 import closeIcon from '@iconify/icons-fa-solid/window-close';
 import searchLocationIcon from '@iconify/icons-fa-solid/search-location';
@@ -23,6 +24,7 @@ class App extends Component<Props<any>, AppState> {
         dropboxLocations: [],
         destinations: [],
         isHeroContainerOpen: true,
+        isSearchingForHome: false,
       },
     }
   }
@@ -45,9 +47,21 @@ class App extends Component<Props<any>, AppState> {
     this.setState({ store });
   }
 
+  setSearchingForHome = (isSearching: boolean) => {
+    const store = this.state.store;
+    store.isSearchingForHome = isSearching;
+    this.setState({ store });
+  }
+
   addDestination = (destination: Destination) => {
     const store = this.state.store;
     store.destinations.push(destination);
+    this.setState({ store });
+  }
+
+  clearDropboxLocations = () => {
+    const store = this.state.store;
+    store.dropboxLocations = [];
     this.setState({ store });
   }
   
@@ -74,8 +88,18 @@ class App extends Component<Props<any>, AppState> {
         store={this.state.store}
         setHome={this.setHome}
         addDestination={this.addDestination}
+        clearDropboxLocations={this.clearDropboxLocations}
+        setSearchingForHome={this.setSearchingForHome}
       />
     )
+  }
+
+  renderSpinner = (): JSX.Element => {
+    return (
+      <Spinner style={{ position: 'fixed', top: '47%', left: '47%' }} animation='border' role='status'>
+        <span className='sr-only'>Loading...</span>
+      </Spinner>
+    );
   }
 
   render() {
@@ -89,6 +113,9 @@ class App extends Component<Props<any>, AppState> {
         <OverlayWrapper>
           { isHeroContainerOpen && this.renderHeroCollapseButton() }
           { !isHeroContainerOpen && this.renderHeroExpandButton() }
+        </OverlayWrapper>
+        <OverlayWrapper>
+          { this.state.store.isSearchingForHome ? this.renderSpinner() : null }
         </OverlayWrapper>
       </React.Fragment>
     );

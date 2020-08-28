@@ -14,6 +14,8 @@ type HeroInputContainerProps = {
   store: Store;
   setHome: (home: Home) => void;
   addDestination: (destination: Destination) => void;
+  clearDropboxLocations: () => void;
+  setSearchingForHome: (isSearching: boolean) => void;
 }
 
 type HeroInputContainerState = {
@@ -29,11 +31,14 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
   geocodeAddress = () => {
     const geocoder = new google.maps.Geocoder();
     const address = `${this.state.address}, MI`;
+    this.props.clearDropboxLocations();
+    this.props.setSearchingForHome(true);
     geocoder.geocode({ address }, this.handleGeocodeResults);
   }
 
   handleGeocodeResults = (results: google.maps.GeocoderResult[], status: google.maps.GeocoderStatus) => {
     console.log('results', results);
+    this.props.setSearchingForHome(false);
     const city = results[0].address_components.find(component => component.types.includes('locality'))?.long_name;
     if (city) {
       const location = results[0].geometry.location;

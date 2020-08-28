@@ -7,6 +7,7 @@ export type Store = {
   center?: google.maps.LatLngLiteral;
   zoom?: number;
   isHeroContainerOpen: boolean;
+  isSearchingForHome: boolean;
 }
 
 export type Destination = {
