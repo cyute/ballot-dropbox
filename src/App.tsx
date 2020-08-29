@@ -7,7 +7,7 @@ import { Home, Store, Destination } from './components/types';
 import DropboxLocator from './data/DropboxLocator';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
-import { Icon } from '@iconify/react';
+import { InlineIcon } from '@iconify/react';
 import closeIcon from '@iconify/icons-fa-solid/window-close';
 import searchLocationIcon from '@iconify/icons-fa-solid/search-location';
 
@@ -69,7 +69,7 @@ class App extends Component<Props<any>, AppState> {
     const style: CSSProperties = { cursor: 'pointer', fontSize: '1.25rem', color: '#333333' };
     return (
       <div onClick={this.toggleDisplay}>
-        <Icon style={style} className='mt-3 mr-2 float-right' icon={closeIcon} /> 
+        <InlineIcon style={style} className='mt-3 mr-2 float-right' icon={closeIcon} /> 
       </div>
     );
   }
@@ -77,7 +77,7 @@ class App extends Component<Props<any>, AppState> {
   renderHeroExpandButton = (): JSX.Element => {
     return (
       <Button className='mt-3' variant='dark' size='sm' onClick={this.toggleDisplay}>
-         <Icon icon={searchLocationIcon} /> Open Dropbox Locator
+         <InlineIcon icon={searchLocationIcon} /> Open Dropbox Locator
       </Button>
     );
   }

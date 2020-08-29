@@ -7495,7 +7495,15 @@ export const locations: DropboxLocation[] = [
 
 const dropboxLocator: DropboxLocator = {
   filterByCityAndState: (targetCity: string, targetState: string): DropboxLocation[] => {
-    return locations.filter(({city, state}) => targetCity === city && targetState === state);
+    return locations.filter(({jurisdiction, city, state}) => {
+      if (targetCity === city && targetState === state) {
+        return true;
+      }
+      if (targetCity === jurisdiction && targetState === state) {
+        return true;
+      }
+      return false;
+    });
   },
 };
 
