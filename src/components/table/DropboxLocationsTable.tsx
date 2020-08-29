@@ -4,6 +4,8 @@ import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import { Destination } from '../types';
 import { Comment } from './Comment';
+import { InlineIcon } from '@iconify/react';
+import mapMarkedAlt from '@iconify/icons-fa-solid/map-marked-alt';
 
 type DropboxLocationsTableProps = {
   dropboxLocations: DropboxLocation[];
@@ -58,9 +60,14 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps,
   renderRow = (location: DropboxLocation, index: number) => {
     const { address, comments, jurisdiction, isOutdoors, dropoffHours } = location;
     return (
-      <tr key={index} onClick={(event) => this.geocodeAddress(location)}>
-        <td>{jurisdiction}</td>
-        <td>{address}</td>
+      <tr key={index} style={{ cursor: 'pointer' }} title='click to add marker' onClick={() => this.geocodeAddress(location)}>
+        <td>
+          { jurisdiction }
+        </td>
+        <td>
+          { address }
+          <InlineIcon className='ml-1' icon={mapMarkedAlt} />
+        </td>
         <td>
           <Comment 
             address={address}
@@ -122,7 +129,7 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps,
             </tr>
           </thead>
           <tbody style={{ fontWeight: 300 }}>
-            {dropboxLocations.map((location, index) => this.renderRow(location, index))}
+            { dropboxLocations.map((location, index) => this.renderRow(location, index)) }
           </tbody>
         </Table>
         <small>
