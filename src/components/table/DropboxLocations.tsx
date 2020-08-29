@@ -76,8 +76,8 @@ export class DropboxLocations extends Component<DropboxLocationsProps, DropboxLo
           isSearching={this.props.isSearching}
         />
         <div>
-          <small className='text-danger'>
-            <sup>*</sup>Voters must only use the drop box in their jurisdiction
+          <small className='text-danger' style={{ fontWeight: 600 }}>
+            <sup>*</sup> Voters must only use the drop box in their jurisdiction
           </small>
         </div>
         {/* <div>
