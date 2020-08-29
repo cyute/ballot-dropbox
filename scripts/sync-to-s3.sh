@@ -1,1 +1,1 @@
-aws s3 sync ./build/ s3://ballot-dropboxes
+aws s3 sync ./build/ s3://ballot-dropboxes --acl public-read
