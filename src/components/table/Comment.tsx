@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Popover from 'react-bootstrap/Popover';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import { Icon } from '@iconify/react';
+import { InlineIcon } from '@iconify/react';
 import infoIcon from '@iconify/icons-fa-solid/info';
 
 type CommentProps = {
@@ -36,7 +36,7 @@ export class Comment extends Component<CommentProps> {
         </span>
         <div className='d-block d-sm-none text-center'>
           <OverlayTrigger trigger='click' placement='left' overlay={ this.popover() }>
-            <Icon icon={ infoIcon } />
+            <InlineIcon icon={ infoIcon } />
           </OverlayTrigger>
         </div>
       </div>

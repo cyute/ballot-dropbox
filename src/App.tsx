@@ -89,14 +89,15 @@ class App extends Component<Props<any>, AppState> {
         setHome={this.setHome}
         addDestination={this.addDestination}
         clearDropboxLocations={this.clearDropboxLocations}
-        setSearchingForHome={this.setSearchingForHome}
+        isSearching={this.setSearchingForHome}
       />
     )
   }
 
   renderSpinner = (): JSX.Element => {
+    const style: CSSProperties = { position: 'fixed', top: '47%', left: '47%' };
     return (
-      <Spinner style={{ position: 'fixed', top: '47%', left: '47%' }} animation='border' role='status'>
+      <Spinner style={style} animation='border' role='status'>
         <span className='sr-only'>Loading...</span>
       </Spinner>
     );

@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { Home, Store, Destination } from './types';
-import { DropboxLocationsTable } from './table/DropboxLocationsTable';
+import { DropboxLocations } from './table/DropboxLocations';
 import { Icon } from '@iconify/react';
 import searchIcon from '@iconify/icons-fa-solid/search';
 
@@ -15,7 +15,7 @@ type HeroInputContainerProps = {
   setHome: (home: Home) => void;
   addDestination: (destination: Destination) => void;
   clearDropboxLocations: () => void;
-  setSearchingForHome: (isSearching: boolean) => void;
+  isSearching: (isSearching: boolean) => void;
 }
 
 type HeroInputContainerState = {
@@ -32,13 +32,13 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
     const geocoder = new google.maps.Geocoder();
     const address = `${this.state.address}, MI`;
     this.props.clearDropboxLocations();
-    this.props.setSearchingForHome(true);
+    this.props.isSearching(true);
     geocoder.geocode({ address }, this.handleGeocodeResults);
   }
 
   handleGeocodeResults = (results: google.maps.GeocoderResult[], status: google.maps.GeocoderStatus) => {
     console.log('results', results);
-    this.props.setSearchingForHome(false);
+    this.props.isSearching(false);
     const city = results[0].address_components.find(component => component.types.includes('locality'))?.long_name;
     if (city) {
       const location = results[0].geometry.location;
@@ -105,9 +105,10 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
             </Button>
           </InputGroup.Append>
         </InputGroup>
-        <DropboxLocationsTable
+        <DropboxLocations
           dropboxLocations={this.props.store.dropboxLocations}
           addDestination={this.props.addDestination}
+          isSearching={this.props.isSearching}
         />
       </Jumbotron>
     );
