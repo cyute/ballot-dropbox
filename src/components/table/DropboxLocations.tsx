@@ -54,7 +54,7 @@ export class DropboxLocations extends Component<DropboxLocationsProps, DropboxLo
            { dropboxLocations[0].city }, MI
           </p>
         </div>
-        <div className='float-right' style={{ lineHeight: '2rem', fontWeight: 200 }}>
+        <div className='float-right' style={{ lineHeight: '2rem' }}>
           <Form.Check inline 
             label='outdoors'
             type='checkbox' 
@@ -76,7 +76,7 @@ export class DropboxLocations extends Component<DropboxLocationsProps, DropboxLo
           setSearching={this.props.setSearching}
         />
         <div>
-          <small className='text-danger' style={{ fontWeight: 600 }}>
+          <small className='text-danger' style={{ fontWeight: 300 }}>
             <sup>*</sup> Voters must only use the drop box in their jurisdiction
           </small>
         </div>

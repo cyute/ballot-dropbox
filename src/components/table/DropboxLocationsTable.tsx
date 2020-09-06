@@ -55,15 +55,15 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps>
 
   render() {
     return (
-      <Table className='mb-0' variant='dark' hover size='sm' style={{ fontSize: '.85em' }}>
+      <Table className='mb-0' variant='dark' hover size='sm'>
         <thead>
-          <tr style={{ fontWeight: 600 }}>
+          <tr style={{ fontWeight: 300 }}>
             <th>Jurisdiction<sup>*</sup></th>
             <th>Address <InlineIcon className='ml-1' icon={mapMarkedAlt} /></th>
             <th>Info</th>
           </tr>
         </thead>
-        <tbody style={{ fontWeight: 300 }}>
+        <tbody style={{ fontWeight: 100 }}>
           { this.props.dropboxLocations.map((location, index) => this.renderRow(location, index)) }
         </tbody>
       </Table>
