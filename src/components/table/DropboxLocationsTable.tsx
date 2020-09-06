@@ -5,39 +5,33 @@ import { Destination } from '../types';
 import { Comment } from './Comment';
 import { InlineIcon } from '@iconify/react';
 import mapMarkedAlt from '@iconify/icons-fa-solid/map-marked-alt';
+import { LocationClient } from '../../data/LocationClient';
 
 type DropboxLocationsTableProps = {
   dropboxLocations: DropboxLocation[];
   addDestination: (destination: Destination) => void;
-  isSearching: (isSearching: boolean) => void;
+  setSearching: (isSearching: boolean) => void;
 }
 
 export class DropboxLocationsTable extends Component<DropboxLocationsTableProps> {
 
-  // TODO: make geocoder class to DRY up code
-  geocodeAddress = (location: DropboxLocation) => {
-    const geocoder = new google.maps.Geocoder();
-    const address = `${location.address} ${location.city} MI`;
-    this.props.isSearching(true);
-    geocoder.geocode({ address }, this.handleGeocodeResults);
+  private locationClient: LocationClient;
+
+  constructor(props: DropboxLocationsTableProps) {
+    super(props);
+    this.locationClient = new LocationClient();
   }
 
-  handleGeocodeResults = (results: google.maps.GeocoderResult[], status: google.maps.GeocoderStatus) => {
-    console.log('results', results);
-    this.props.isSearching(false);
-    const city = results[0].address_components.find(component => component.types.includes('locality'))?.long_name;
-    if (city) {
-      const location = results[0].geometry.location;
-      const dropboxLocation = {
-        address: results[0].formatted_address,
-        location: {
-          lat: location.lat(),
-          lng: location.lng(),
-        },
-      };
-      this.props.addDestination(dropboxLocation);
+  geocodeAddress = async (location: DropboxLocation) => {
+    const address = `${location.address} ${location.city} MI`;
+    this.props.setSearching(true);
+    const response = await this.locationClient.get(address);
+
+    this.props.setSearching(false);
+    if (response.location) {
+      this.props.addDestination(response.location);
     } else {
-      console.error('No results found.'); // TODO: create visual error
+      // TODO: display not found error
     }
   }
 

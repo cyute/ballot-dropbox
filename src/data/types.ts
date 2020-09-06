@@ -1,3 +1,19 @@
+export enum ErrorType {
+  NOT_FOUND = 'NOT_FOUND',
+}
+
+export type LocationResponse = {
+  error?: ErrorType,
+  location?: {
+    address: string,
+    city: string,
+    location: {
+      lat: number,
+      lng: number,
+    },
+  },
+};
+
 export type DropboxLocation = {
   county: string;
   jurisdiction: string;

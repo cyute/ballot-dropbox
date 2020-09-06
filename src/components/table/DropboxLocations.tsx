@@ -7,7 +7,7 @@ import { DropboxLocationsTable } from './DropboxLocationsTable';
 type DropboxLocationsProps = {
   dropboxLocations: DropboxLocation[];
   addDestination: (destination: Destination) => void;
-  isSearching: (isSearching: boolean) => void;
+  setSearching: (isSearching: boolean) => void;
 }
 
 type DropboxLocationsState = {
@@ -73,7 +73,7 @@ export class DropboxLocations extends Component<DropboxLocationsProps, DropboxLo
         <DropboxLocationsTable
           addDestination={this.props.addDestination}
           dropboxLocations={dropboxLocations}
-          isSearching={this.props.isSearching}
+          setSearching={this.props.setSearching}
         />
         <div>
           <small className='text-danger' style={{ fontWeight: 600 }}>

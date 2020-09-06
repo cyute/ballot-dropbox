@@ -47,7 +47,7 @@ class App extends Component<Props<any>, AppState> {
     this.setState({ store });
   }
 
-  setSearchingForHome = (isSearching: boolean) => {
+  setSearching = (isSearching: boolean) => {
     const store = this.state.store;
     store.isSearchingForHome = isSearching;
     this.setState({ store });
@@ -89,7 +89,7 @@ class App extends Component<Props<any>, AppState> {
         setHome={this.setHome}
         addDestination={this.addDestination}
         clearDropboxLocations={this.clearDropboxLocations}
-        isSearching={this.setSearchingForHome}
+        setSearching={this.setSearching}
       />
     )
   }

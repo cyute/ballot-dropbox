@@ -9,13 +9,14 @@ import { Home, Store, Destination } from './types';
 import { DropboxLocations } from './table/DropboxLocations';
 import { Icon } from '@iconify/react';
 import searchIcon from '@iconify/icons-fa-solid/search';
+import { LocationClient } from '../data/LocationClient';
 
 type HeroInputContainerProps = {
   store: Store;
   setHome: (home: Home) => void;
   addDestination: (destination: Destination) => void;
   clearDropboxLocations: () => void;
-  isSearching: (isSearching: boolean) => void;
+  setSearching: (isSearching: boolean) => void;
 }
 
 type HeroInputContainerState = {
@@ -24,37 +25,29 @@ type HeroInputContainerState = {
 
 export class HeroInputContainer extends Component<HeroInputContainerProps, HeroInputContainerState> {
 
+  private locationClient: LocationClient;
+
+  constructor(props: HeroInputContainerProps) {
+    super(props);
+    this.locationClient = new LocationClient();
+  }
+
   public readonly state: Readonly<HeroInputContainerState> = {
     address: '',
   };
 
-  geocodeAddress = () => {
-    const geocoder = new google.maps.Geocoder();
-    const address = `${this.state.address}, MI`;
+  geocodeAddress = async () => {
     this.props.clearDropboxLocations();
-    this.props.isSearching(true);
-    geocoder.geocode({ address }, this.handleGeocodeResults);
-  }
+    this.props.setSearching(true);
 
-  handleGeocodeResults = (results: google.maps.GeocoderResult[], status: google.maps.GeocoderStatus) => {
-    console.log('results', results);
-    this.props.isSearching(false);
-    const city = results[0].address_components.find(component => component.types.includes('locality'))?.long_name;
-    if (city) {
-      const location = results[0].geometry.location;
-      const home = {
-        address: results[0].formatted_address,
-        city,
-        location: {
-          lat: location.lat(),
-          lng: location.lng(),
-        },
-      };
-      this.props.setHome(home);
-      this.setState({ address: '' })
+    const response = await this.locationClient.get(`${this.state.address}, MI`);
+    this.props.setSearching(false);
+    if (response.location) {
+      this.props.setHome(response.location);
     } else {
-      console.error('No results found.'); // TODO: create visual error
+      // TODO: display not found error
     }
+    this.setState({ address: '' });
   }
 
   onAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,7 +101,7 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
         <DropboxLocations
           dropboxLocations={this.props.store.dropboxLocations}
           addDestination={this.props.addDestination}
-          isSearching={this.props.isSearching}
+          setSearching={this.props.setSearching}
         />
       </Jumbotron>
     );
