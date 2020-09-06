@@ -66,7 +66,7 @@ class App extends Component<Props<any>, AppState> {
   }
   
   renderHeroCollapseButton = (): JSX.Element => {
-    const style: CSSProperties = { cursor: 'pointer', fontSize: '1.25rem', color: '#333333' };
+    const style: CSSProperties = { cursor: 'pointer', color: '#333333' };
     return (
       <div onClick={this.toggleDisplay}>
         <InlineIcon style={style} className='mt-3 mr-2 float-right' icon={closeIcon} /> 
