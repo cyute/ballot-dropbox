@@ -22,7 +22,7 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps>
     this.locationClient = new LocationClient();
   }
 
-  geocodeAddress = async (location: DropboxLocation) => {
+  geocodeAddress = async (location: DropboxLocation): Promise<void> => {
     const address = `${location.address} ${location.city} MI`;
     this.props.setSearching(true);
     const response = await this.locationClient.get(address);
@@ -35,7 +35,7 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps>
     }
   }
 
-  renderRow = (location: DropboxLocation, index: number) => {
+  renderRow = (location: DropboxLocation, index: number): JSX.Element => {
     const { address, comments, jurisdiction, isOutdoors, dropoffHours } = location;
     return (
       <tr key={index} style={{ cursor: 'pointer' }} title='click to add marker' onClick={() => this.geocodeAddress(location)}>
@@ -53,7 +53,7 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps>
     )
   }
 
-  render() {
+  render = (): JSX.Element => {
     return (
       <Table className='mb-0' variant='dark' hover size='sm'>
         <thead>

@@ -24,7 +24,7 @@ export class MapComponent extends Component<MapProps, MapState> {
 
   private googleApiKey: string = process.env['REACT_APP_GOOGLE_API_KEY'] || '';
 
-  renderDestinationMarker = (destination: Destination, index: number) => {
+  renderDestinationMarker = (destination: Destination, index: number): JSX.Element => {
     return (
       <MapMarker
         key={index}
@@ -35,7 +35,7 @@ export class MapComponent extends Component<MapProps, MapState> {
     )
   }
 
-  renderHomeMarker = (home: Home) => {
+  renderHomeMarker = (home: Home): JSX.Element => {
     return (
       <MapMarker
         lat={home.location.lat}
@@ -45,7 +45,7 @@ export class MapComponent extends Component<MapProps, MapState> {
     )
   }
 
-  render() {
+  render = (): JSX.Element => {
     const mapStyle: CSSProperties = {
       height: '100vh',
       width: '100%',

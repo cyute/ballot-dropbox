@@ -26,7 +26,7 @@ export class Comment extends Component<CommentProps> {
     )
   };
 
-  render() {
+  render = (): JSX.Element => {
     const { comments, dropoffHours, isOutdoors } = this.props;
     return (
       <div>

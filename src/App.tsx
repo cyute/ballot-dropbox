@@ -29,13 +29,13 @@ class App extends Component<Props<any>, AppState> {
     }
   }
 
-  toggleDisplay = () => {
+  toggleDisplay = (): void => {
     const store = this.state.store;
     store.isHeroContainerOpen = !this.state.store.isHeroContainerOpen;
     this.setState({ store });
   }
 
-  setHome = (home: Home) => {
+  setHome = (home: Home): void => {
     const store = this.state.store;
     store.home = home;
     store.destinations = [];
@@ -47,19 +47,19 @@ class App extends Component<Props<any>, AppState> {
     this.setState({ store });
   }
 
-  setSearching = (isSearching: boolean) => {
+  setSearching = (isSearching: boolean): void => {
     const store = this.state.store;
     store.isSearchingForHome = isSearching;
     this.setState({ store });
   }
 
-  addDestination = (destination: Destination) => {
+  addDestination = (destination: Destination): void => {
     const store = this.state.store;
     store.destinations.push(destination);
     this.setState({ store });
   }
 
-  clearDropboxLocations = () => {
+  clearDropboxLocations = (): void => {
     const store = this.state.store;
     store.dropboxLocations = [];
     this.setState({ store });
@@ -103,7 +103,7 @@ class App extends Component<Props<any>, AppState> {
     );
   }
 
-  render() {
+  render = (): JSX.Element => {
     const { isHeroContainerOpen } = this.state.store;
     return (
       <React.Fragment>

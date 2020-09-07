@@ -22,11 +22,11 @@ export class DropboxLocations extends Component<DropboxLocationsProps, DropboxLo
     isOpen24Hours: false,
   };
 
-  toggleOutdoors = () => {
+  toggleOutdoors = (): void => {
     this.setState({ isOutdoorsOnly: !this.state.isOutdoorsOnly });
   }
 
-  toggle24Hours = () => {
+  toggle24Hours = (): void => {
     this.setState({ isOpen24Hours: !this.state.isOpen24Hours });
   }
 
@@ -42,10 +42,10 @@ export class DropboxLocations extends Component<DropboxLocationsProps, DropboxLo
     });
   }
 
-  render() {
+  render = (): JSX.Element => {
     const dropboxLocations = this.getDropboxLocations();
     if (dropboxLocations.length === 0) {
-      return React.Fragment;
+      return <React.Fragment />;
     }
     return (
       <div className='table-responsive'>

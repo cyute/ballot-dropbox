@@ -36,7 +36,7 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
     address: '',
   };
 
-  geocodeAddress = async () => {
+  geocodeAddress = async (): Promise<void> => {
     this.props.clearDropboxLocations();
     this.props.setSearching(true);
 
@@ -50,11 +50,11 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
     this.setState({ address: '' });
   }
 
-  onAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  onAddressChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     this.setState({ address: event.currentTarget.value });
   }
 
-  onAddressKeyPress = (event: React.KeyboardEvent) => {
+  onAddressKeyPress = (event: React.KeyboardEvent): void => {
     if (event.key === 'Enter') {
       this.geocodeAddress();
     }

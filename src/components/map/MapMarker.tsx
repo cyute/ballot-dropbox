@@ -12,7 +12,7 @@ type MapMarkerProps = {
 
 export class MapMarker extends Component<MapMarkerProps> {
 
-  render() {
+  render = (): JSX.Element => {
     const { color, label } = this.props;
     return (
       <React.Fragment>
