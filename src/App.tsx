@@ -26,7 +26,7 @@ class App extends Component<Props<any>, AppState> {
         destinations: [],
         isHeroContainerOpen: true,
         isSearchingForHome: false,
-        isDisplayError: true,
+        isDisplayError: false,
       },
     }
   }
