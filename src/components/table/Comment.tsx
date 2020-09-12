@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Button from 'react-bootstrap/Button';
 import Popover from 'react-bootstrap/Popover';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import { InlineIcon } from '@iconify/react';
@@ -36,7 +37,9 @@ export class Comment extends Component<CommentProps> {
         </span>
         <div className='d-block d-sm-none text-center'>
           <OverlayTrigger trigger='click' placement='left' overlay={ this.popover() }>
-            <InlineIcon icon={ infoIcon } />
+            <Button variant='secondary' size='sm' onClick={(event) => event.stopPropagation()}>
+              <InlineIcon icon={ infoIcon } /> 
+            </Button>
           </OverlayTrigger>
         </div>
       </div>

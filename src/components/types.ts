@@ -8,6 +8,7 @@ export type Store = {
   zoom?: number;
   isHeroContainerOpen: boolean;
   isSearchingForHome: boolean;
+  isDisplayError: boolean;
 }
 
 export type Destination = {

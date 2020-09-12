@@ -7,6 +7,7 @@ import { Home, Store, Destination } from './components/types';
 import DropboxLocator from './data/DropboxLocator';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
+import Alert from 'react-bootstrap/Alert';
 import { InlineIcon } from '@iconify/react';
 import closeIcon from '@iconify/icons-fa-solid/window-close';
 import searchLocationIcon from '@iconify/icons-fa-solid/search-location';
@@ -25,6 +26,7 @@ class App extends Component<Props<any>, AppState> {
         destinations: [],
         isHeroContainerOpen: true,
         isSearchingForHome: false,
+        isDisplayError: true,
       },
     }
   }
@@ -50,6 +52,12 @@ class App extends Component<Props<any>, AppState> {
   setSearching = (isSearching: boolean): void => {
     const store = this.state.store;
     store.isSearchingForHome = isSearching;
+    this.setState({ store });
+  }
+
+  setError = (isDisplayError: boolean): void => {
+    const store = this.state.store;
+    store.isDisplayError = isDisplayError;
     this.setState({ store });
   }
 
@@ -90,6 +98,7 @@ class App extends Component<Props<any>, AppState> {
         addDestination={this.addDestination}
         clearDropboxLocations={this.clearDropboxLocations}
         setSearching={this.setSearching}
+        setError={this.setError}
       />
     )
   }
@@ -100,6 +109,15 @@ class App extends Component<Props<any>, AppState> {
       <Spinner style={style} animation='border' role='status'>
         <span className='sr-only'>Loading...</span>
       </Spinner>
+    );
+  }
+
+  renderError = (): JSX.Element => {
+    const style: CSSProperties = { position: 'fixed', bottom: 5, left: '2%', width: '96%' };
+    return (
+      <Alert variant='danger' style={style} onClose={() => this.setError(false)} dismissible>
+        We were unable to add a marker to the map.  Please try again.
+      </Alert>
     );
   }
 
@@ -117,6 +135,9 @@ class App extends Component<Props<any>, AppState> {
         </OverlayWrapper>
         <OverlayWrapper>
           { this.state.store.isSearchingForHome ? this.renderSpinner() : null }
+        </OverlayWrapper>
+        <OverlayWrapper>
+          { this.state.store.isDisplayError ? this.renderError() : null }
         </OverlayWrapper>
       </React.Fragment>
     );

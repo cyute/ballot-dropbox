@@ -17,6 +17,7 @@ type HeroInputContainerProps = {
   addDestination: (destination: Destination) => void;
   clearDropboxLocations: () => void;
   setSearching: (isSearching: boolean) => void;
+  setError: (isError: boolean) => void;
 }
 
 type HeroInputContainerState = {
@@ -45,7 +46,7 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
     if (response.location) {
       this.props.setHome(response.location);
     } else {
-      // TODO: display not found error
+      this.props.setError(true);
     }
     this.setState({ address: '' });
   }
