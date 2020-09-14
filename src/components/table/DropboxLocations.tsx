@@ -80,13 +80,6 @@ export class DropboxLocations extends Component<DropboxLocationsProps, DropboxLo
             <sup>*</sup> Voters must only use the drop box in their jurisdiction
           </small>
         </div>
-        {/* <div>
-          <small>
-            <a href='https://www.michigan.gov/documents/sos/Ballot_Dropbox_Locations_697191_7.pdf' target='_blank' rel='noopener noreferrer'>
-              data sourced from www.michigan.gov
-            </a>
-          </small>
-        </div> */}
       </div>
     );
   }

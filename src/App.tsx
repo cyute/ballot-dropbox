@@ -11,6 +11,7 @@ import Alert from 'react-bootstrap/Alert';
 import { InlineIcon } from '@iconify/react';
 import closeIcon from '@iconify/icons-fa-solid/window-close';
 import searchLocationIcon from '@iconify/icons-fa-solid/search-location';
+import questionCircle from '@iconify/icons-fa-solid/question-circle';
 
 type AppState = {
   store: Store,
@@ -76,8 +77,8 @@ class App extends Component<Props<any>, AppState> {
   renderHeroCollapseButton = (): JSX.Element => {
     const style: CSSProperties = { cursor: 'pointer', color: '#333333' };
     return (
-      <div onClick={this.toggleDisplay}>
-        <InlineIcon style={style} className='mt-3 mr-2 float-right' icon={closeIcon} /> 
+      <div onClick={this.toggleDisplay} className='float-right'>
+        <InlineIcon style={style} className='mt-3 mr-2' icon={closeIcon} /> 
       </div>
     );
   }
@@ -85,7 +86,7 @@ class App extends Component<Props<any>, AppState> {
   renderHeroExpandButton = (): JSX.Element => {
     return (
       <Button className='mt-3' variant='dark' size='sm' onClick={this.toggleDisplay}>
-         <InlineIcon icon={searchLocationIcon} /> Open Dropbox Locator
+        <InlineIcon icon={searchLocationIcon} /> Open Dropbox Locator
       </Button>
     );
   }
@@ -121,6 +122,15 @@ class App extends Component<Props<any>, AppState> {
     );
   }
 
+  renderFAQLink = (): JSX.Element => {
+    const style: CSSProperties = { position: 'fixed', bottom: 5, left: '45%' };
+    return (
+      <Button variant='dark' size='sm' style={style} onClick={() => window.location.href='/faq.html' }>
+        <InlineIcon icon={questionCircle} /> FAQ
+      </Button>
+    );
+  }
+
   render = (): JSX.Element => {
     const { isHeroContainerOpen } = this.state.store;
     return (
@@ -138,6 +148,7 @@ class App extends Component<Props<any>, AppState> {
         </OverlayWrapper>
         <OverlayWrapper>
           { this.state.store.isDisplayError ? this.renderError() : null }
+          { !this.state.store.isDisplayError ? this.renderFAQLink() : null }
         </OverlayWrapper>
       </React.Fragment>
     );
