@@ -117,7 +117,7 @@ class App extends Component<Props<any>, AppState> {
     const style: CSSProperties = { position: 'fixed', bottom: 5, left: '2%', width: '96%' };
     return (
       <Alert variant='danger' style={style} onClose={() => this.setError(false)} dismissible>
-        We were unable to add a marker to the map.  Please try again.
+        We were unable to locate the address or city.  Please try again.
       </Alert>
     );
   }

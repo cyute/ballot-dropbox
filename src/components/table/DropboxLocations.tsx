@@ -30,20 +30,8 @@ export class DropboxLocations extends Component<DropboxLocationsProps, DropboxLo
     this.setState({ isOpen24Hours: !this.state.isOpen24Hours });
   }
 
-  getDropboxLocations = (): DropboxLocation[] => {
-    return this.props.dropboxLocations.filter(location => {
-      if (this.state.isOutdoorsOnly && !location.isOutdoors) {
-        return false;
-      }
-      if (this.state.isOpen24Hours && location.dropoffHours !== '24/7') {
-        return false;
-      }
-      return true;
-    });
-  }
-
   render = (): JSX.Element => {
-    const dropboxLocations = this.getDropboxLocations();
+    const { dropboxLocations } = this.props;
     if (dropboxLocations.length === 0) {
       return <React.Fragment />;
     }
@@ -74,6 +62,8 @@ export class DropboxLocations extends Component<DropboxLocationsProps, DropboxLo
           addDestination={this.props.addDestination}
           dropboxLocations={dropboxLocations}
           setSearching={this.props.setSearching}
+          isOpen24Hours={this.state.isOpen24Hours}
+          isOutdoorsOnly={this.state.isOutdoorsOnly}
         />
         <div>
           <small className='text-danger' style={{ fontWeight: 300 }}>

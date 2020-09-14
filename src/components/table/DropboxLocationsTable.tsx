@@ -11,6 +11,8 @@ type DropboxLocationsTableProps = {
   dropboxLocations: DropboxLocation[];
   addDestination: (destination: Destination) => void;
   setSearching: (isSearching: boolean) => void;
+  isOutdoorsOnly: boolean;
+  isOpen24Hours: boolean;
 }
 
 export class DropboxLocationsTable extends Component<DropboxLocationsTableProps> {
@@ -53,6 +55,16 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps>
     )
   }
 
+  canDisplayLocation = (location: DropboxLocation): boolean => {
+    if (this.props.isOutdoorsOnly && !location.isOutdoors) {
+      return false;
+    }
+    if (this.props.isOpen24Hours && location.dropoffHours !== '24/7') {
+      return false;
+    }
+    return true;
+  }
+
   render = (): JSX.Element => {
     return (
       <Table className='mb-0' variant='dark' hover size='sm'>
@@ -64,7 +76,11 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps>
           </tr>
         </thead>
         <tbody style={{ fontWeight: 100 }}>
-          { this.props.dropboxLocations.map((location, index) => this.renderRow(location, index)) }
+          {
+            this.props.dropboxLocations
+              .filter((location) => this.canDisplayLocation(location))
+              .map((location, index) => this.renderRow(location, index))
+          }
         </tbody>
       </Table>
     );
