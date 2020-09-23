@@ -19,5 +19,6 @@ export type Destination = {
 export type Home = {
   address: string;
   city: string;
+  state: string;
   location: google.maps.LatLngLiteral;
 }

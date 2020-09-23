@@ -22,6 +22,7 @@ type HeroInputContainerProps = {
 
 type HeroInputContainerState = {
   address: string;
+  state: string;
 }
 
 export class HeroInputContainer extends Component<HeroInputContainerProps, HeroInputContainerState> {
@@ -35,13 +36,14 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
 
   public readonly state: Readonly<HeroInputContainerState> = {
     address: '',
+    state: 'MI',
   };
 
   geocodeAddress = async (): Promise<void> => {
     this.props.clearDropboxLocations();
     this.props.setSearching(true);
 
-    const response = await this.locationClient.get(`${this.state.address}, MI`);
+    const response = await this.locationClient.get(`${this.state.address}, ${this.state.state}`);
     this.props.setSearching(false);
     if (response.location) {
       this.props.setHome(response.location);
@@ -59,6 +61,17 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
     if (event.key === 'Enter') {
       this.geocodeAddress();
     }
+  }
+
+  onStateSelect = (eventKey: any): void => {
+    let state: string = '';
+    if (eventKey === '1') {
+      state = 'MI';
+    }
+    if (eventKey === '2') {
+      state = 'OH';
+    }
+    this.setState({ state });
   }
 
   renderTitle = (): JSX.Element => {
@@ -86,11 +99,12 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
           <DropdownButton
             as={InputGroup.Append}
             variant='outline-dark'
-            title='MI'
+            title={this.state.state}
             id='input-group-dropdown-2'
           >
             <Dropdown.Header>States</Dropdown.Header>
-            <Dropdown.Item href='#'>MI</Dropdown.Item>
+            <Dropdown.Item href='#' eventKey='1' onSelect={this.onStateSelect}>MI</Dropdown.Item>
+            <Dropdown.Item href='#' eventKey='2' onSelect={this.onStateSelect}>OH</Dropdown.Item>
           </DropdownButton>
           <InputGroup.Append>
             <Button onClick={this.geocodeAddress} variant='outline-dark'>

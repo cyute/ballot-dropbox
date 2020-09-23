@@ -30,6 +30,20 @@ export class DropboxLocations extends Component<DropboxLocationsProps, DropboxLo
     this.setState({ isOpen24Hours: !this.state.isOpen24Hours });
   }
 
+  renderDisclaimer = (): JSX.Element => {
+    const { dropboxLocations } = this.props;
+    if (dropboxLocations[0].state === 'MI') {
+      return (
+        <div>
+          <small className='text-danger' style={{ fontWeight: 300 }}>
+            <sup>*</sup> Voters must only use the drop box in their jurisdiction
+          </small>
+        </div>
+      )
+    }
+    return <React.Fragment />;
+  }
+
   render = (): JSX.Element => {
     const { dropboxLocations } = this.props;
     if (dropboxLocations.length === 0) {
@@ -39,7 +53,7 @@ export class DropboxLocations extends Component<DropboxLocationsProps, DropboxLo
       <div className='table-responsive'>
         <div className='float-left'>
           <p className='lead mb-1'>
-           { dropboxLocations[0].city }, MI
+           { dropboxLocations[0].city }, { dropboxLocations[0].state }
           </p>
         </div>
         <div className='float-right' style={{ lineHeight: '2rem' }}>
@@ -65,11 +79,7 @@ export class DropboxLocations extends Component<DropboxLocationsProps, DropboxLo
           isOpen24Hours={this.state.isOpen24Hours}
           isOutdoorsOnly={this.state.isOutdoorsOnly}
         />
-        <div>
-          <small className='text-danger' style={{ fontWeight: 300 }}>
-            <sup>*</sup> Voters must only use the drop box in their jurisdiction
-          </small>
-        </div>
+        { this.renderDisclaimer() }
       </div>
     );
   }

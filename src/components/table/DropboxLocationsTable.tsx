@@ -25,7 +25,7 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps>
   }
 
   geocodeAddress = async (location: DropboxLocation): Promise<void> => {
-    const address = `${location.address} ${location.city} MI`;
+    const address = `${location.address} ${location.city} ${location.state}`;
     this.props.setSearching(true);
     const response = await this.locationClient.get(address);
 
@@ -70,7 +70,7 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps>
       <Table className='mb-0' variant='dark' hover size='sm'>
         <thead>
           <tr style={{ fontWeight: 300 }}>
-            <th>Jurisdiction<sup>*</sup></th>
+            <th>Jurisdiction</th>
             <th>Address <InlineIcon className='ml-1' icon={mapMarkedAlt} /></th>
             <th>Info</th>
           </tr>
