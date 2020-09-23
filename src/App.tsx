@@ -23,6 +23,10 @@ class App extends Component<Props<any>, AppState> {
     super(props);
     this.state = {
       store: {
+        lookup: {
+          address: '',
+          state: 'MI',
+        },
         dropboxLocations: [],
         destinations: [],
         isHeroContainerOpen: true,
@@ -35,6 +39,24 @@ class App extends Component<Props<any>, AppState> {
   toggleDisplay = (): void => {
     const store = this.state.store;
     store.isHeroContainerOpen = !this.state.store.isHeroContainerOpen;
+    this.setState({ store });
+  }
+
+  onLookupAddressChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    console.log('onLookupAddressChange', event);
+    const store = this.state.store;
+    store.lookup.address = event.currentTarget.value;
+    this.setState({ store });
+  }
+
+  onLookupStateSelect = (eventKey: any): void => {
+    const store = this.state.store;
+    if (eventKey === '1') {
+      store.lookup.state = 'MI';
+    }
+    if (eventKey === '2') {
+      store.lookup.state = 'OH';
+    }
     this.setState({ store });
   }
 
@@ -95,6 +117,8 @@ class App extends Component<Props<any>, AppState> {
     return (
       <HeroInputContainer 
         store={this.state.store}
+        onLookupAddressChange={this.onLookupAddressChange}
+        onLookupStateSelect={this.onLookupStateSelect}
         setHome={this.setHome}
         addDestination={this.addDestination}
         clearDropboxLocations={this.clearDropboxLocations}

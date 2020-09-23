@@ -1,6 +1,7 @@
 import { DropboxLocation } from "../data/types"
 
 export type Store = {
+  lookup: Lookup;
   home?: Home;
   destinations: Destination[];
   dropboxLocations: DropboxLocation[];
@@ -9,6 +10,11 @@ export type Store = {
   isHeroContainerOpen: boolean;
   isSearchingForHome: boolean;
   isDisplayError: boolean;
+}
+
+export type Lookup = {
+  address: string;
+  state: string;
 }
 
 export type Destination = {

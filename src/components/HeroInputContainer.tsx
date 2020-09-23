@@ -13,6 +13,8 @@ import { LocationClient } from '../data/LocationClient';
 
 type HeroInputContainerProps = {
   store: Store;
+  onLookupAddressChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onLookupStateSelect: (eventKey: any) => void;
   setHome: (home: Home) => void;
   addDestination: (destination: Destination) => void;
   clearDropboxLocations: () => void;
@@ -20,12 +22,7 @@ type HeroInputContainerProps = {
   setError: (isError: boolean) => void;
 }
 
-type HeroInputContainerState = {
-  address: string;
-  state: string;
-}
-
-export class HeroInputContainer extends Component<HeroInputContainerProps, HeroInputContainerState> {
+export class HeroInputContainer extends Component<HeroInputContainerProps> {
 
   private locationClient: LocationClient;
 
@@ -34,16 +31,11 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
     this.locationClient = new LocationClient();
   }
 
-  public readonly state: Readonly<HeroInputContainerState> = {
-    address: '',
-    state: 'MI',
-  };
-
   geocodeAddress = async (): Promise<void> => {
     this.props.clearDropboxLocations();
     this.props.setSearching(true);
 
-    const response = await this.locationClient.get(`${this.state.address}, ${this.state.state}`);
+    const response = await this.locationClient.get(`${this.props.store.lookup.address}, ${this.props.store.lookup.state}`);
     this.props.setSearching(false);
     if (response.location) {
       this.props.setHome(response.location);
@@ -53,25 +45,10 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
     this.setState({ address: '' });
   }
 
-  onAddressChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    this.setState({ address: event.currentTarget.value });
-  }
-
   onAddressKeyPress = (event: React.KeyboardEvent): void => {
     if (event.key === 'Enter') {
       this.geocodeAddress();
     }
-  }
-
-  onStateSelect = (eventKey: any): void => {
-    let state: string = '';
-    if (eventKey === '1') {
-      state = 'MI';
-    }
-    if (eventKey === '2') {
-      state = 'OH';
-    }
-    this.setState({ state });
   }
 
   renderTitle = (): JSX.Element => {
@@ -92,19 +69,19 @@ export class HeroInputContainer extends Component<HeroInputContainerProps, HeroI
             placeholder='Street address and/or city'
             aria-label='Street address and/or city'
             aria-describedby='basic-addon1'
-            value={this.state.address}
-            onChange={this.onAddressChange}
+            value={this.props.store.lookup.address}
+            onChange={this.props.onLookupAddressChange}
             onKeyPress={this.onAddressKeyPress}
           />
           <DropdownButton
             as={InputGroup.Append}
             variant='outline-dark'
-            title={this.state.state}
+            title={this.props.store.lookup.state}
             id='input-group-dropdown-2'
           >
             <Dropdown.Header>States</Dropdown.Header>
-            <Dropdown.Item href='#' eventKey='1' onSelect={this.onStateSelect}>MI</Dropdown.Item>
-            <Dropdown.Item href='#' eventKey='2' onSelect={this.onStateSelect}>OH</Dropdown.Item>
+            <Dropdown.Item href='#' eventKey='1' onSelect={this.props.onLookupStateSelect}>MI</Dropdown.Item>
+            <Dropdown.Item href='#' eventKey='2' onSelect={this.props.onLookupStateSelect}>OH</Dropdown.Item>
           </DropdownButton>
           <InputGroup.Append>
             <Button onClick={this.geocodeAddress} variant='outline-dark'>
