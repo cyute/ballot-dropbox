@@ -43,7 +43,6 @@ class App extends Component<Props<any>, AppState> {
   }
 
   onLookupAddressChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    console.log('onLookupAddressChange', event);
     const store = this.state.store;
     store.lookup.address = event.currentTarget.value;
     this.setState({ store });
@@ -53,9 +52,13 @@ class App extends Component<Props<any>, AppState> {
     const store = this.state.store;
     if (eventKey === '1') {
       store.lookup.state = 'MI';
+      store.center = { lat: 44.6254027, lng: -84.9069361 };
+      store.zoom = 6;
     }
     if (eventKey === '2') {
       store.lookup.state = 'OH';
+      store.center = { lat: 41.2459212, lng: -82.9121421 };
+      store.zoom = 6;
     }
     this.setState({ store });
   }

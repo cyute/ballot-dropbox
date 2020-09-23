@@ -61,6 +61,7 @@ export class HeroInputContainer extends Component<HeroInputContainerProps> {
   }
 
   render = (): JSX.Element => {
+    const { onLookupAddressChange, onLookupStateSelect, addDestination, setSearching, store } = this.props;
     return (
       <Jumbotron className='mt-2' style={{ backgroundColor: '#E3D197', opacity: .9 }}>
         { this.renderTitle() }
@@ -69,19 +70,19 @@ export class HeroInputContainer extends Component<HeroInputContainerProps> {
             placeholder='Street address and/or city'
             aria-label='Street address and/or city'
             aria-describedby='basic-addon1'
-            value={this.props.store.lookup.address}
-            onChange={this.props.onLookupAddressChange}
+            value={store.lookup.address}
+            onChange={onLookupAddressChange}
             onKeyPress={this.onAddressKeyPress}
           />
           <DropdownButton
             as={InputGroup.Append}
             variant='outline-dark'
-            title={this.props.store.lookup.state}
+            title={store.lookup.state}
             id='input-group-dropdown-2'
           >
             <Dropdown.Header>States</Dropdown.Header>
-            <Dropdown.Item href='#' eventKey='1' onSelect={this.props.onLookupStateSelect}>MI</Dropdown.Item>
-            <Dropdown.Item href='#' eventKey='2' onSelect={this.props.onLookupStateSelect}>OH</Dropdown.Item>
+            <Dropdown.Item href='#' eventKey='1' onSelect={onLookupStateSelect}>MI</Dropdown.Item>
+            <Dropdown.Item href='#' eventKey='2' onSelect={onLookupStateSelect}>OH</Dropdown.Item>
           </DropdownButton>
           <InputGroup.Append>
             <Button onClick={this.geocodeAddress} variant='outline-dark'>
@@ -91,9 +92,9 @@ export class HeroInputContainer extends Component<HeroInputContainerProps> {
           </InputGroup.Append>
         </InputGroup>
         <DropboxLocations
-          dropboxLocations={this.props.store.dropboxLocations}
-          addDestination={this.props.addDestination}
-          setSearching={this.props.setSearching}
+          dropboxLocations={store.dropboxLocations}
+          addDestination={addDestination}
+          setSearching={setSearching}
         />
       </Jumbotron>
     );

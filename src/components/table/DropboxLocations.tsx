@@ -3,6 +3,7 @@ import { DropboxLocation } from '../../data/types';
 import Form from 'react-bootstrap/Form';
 import { Destination } from '../types';
 import { DropboxLocationsTable } from './DropboxLocationsTable';
+import { Disclaimer } from './Disclaimer';
 
 type DropboxLocationsProps = {
   dropboxLocations: DropboxLocation[];
@@ -28,20 +29,6 @@ export class DropboxLocations extends Component<DropboxLocationsProps, DropboxLo
 
   toggle24Hours = (): void => {
     this.setState({ isOpen24Hours: !this.state.isOpen24Hours });
-  }
-
-  renderDisclaimer = (): JSX.Element => {
-    const { dropboxLocations } = this.props;
-    if (dropboxLocations[0].state === 'MI') {
-      return (
-        <div>
-          <small className='text-danger' style={{ fontWeight: 300 }}>
-            <sup>*</sup> Voters must only use the drop box in their jurisdiction
-          </small>
-        </div>
-      )
-    }
-    return <React.Fragment />;
   }
 
   render = (): JSX.Element => {
@@ -79,7 +66,7 @@ export class DropboxLocations extends Component<DropboxLocationsProps, DropboxLo
           isOpen24Hours={this.state.isOpen24Hours}
           isOutdoorsOnly={this.state.isOutdoorsOnly}
         />
-        { this.renderDisclaimer() }
+        <Disclaimer dropboxLocations={this.props.dropboxLocations} />
       </div>
     );
   }

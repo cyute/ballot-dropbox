@@ -11,7 +11,6 @@ export class LocationClient {
       return { location: response.data.location };
     }
     catch (error) {
-      console.log('error', error);
       return { error: ErrorType.NOT_FOUND };
     }
   }
