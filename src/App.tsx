@@ -60,6 +60,11 @@ class App extends Component<Props<any>, AppState> {
       store.center = { lat: 41.2459212, lng: -82.9121421 };
       store.zoom = 6;
     }
+    if (eventKey === '3') {
+      store.lookup.state = 'PA';
+      store.center = { lat: 41.6459212, lng: -77.4121421 };
+      store.zoom = 6;
+    }
     this.setState({ store });
   }
 

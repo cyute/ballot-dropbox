@@ -1,16 +1,13 @@
 import { DropboxLocation, DropboxLocator } from "./types";
 import { michigan } from './locations/michigan';
 import { ohio } from './locations/ohio';
+import { pennsylvania } from "./locations/pennsylvania";
 
-const michiganLocations: DropboxLocation[] = michigan.map(location => {
-  return { ...location, state: 'MI' };
-});
+const michiganLocations: DropboxLocation[] = michigan.map(location => ({...location, state: 'MI' }));
+const ohioLocations: DropboxLocation[] = ohio.map(location => ({...location, state: 'OH' }));
+const pennsylvaniaLocations: DropboxLocation[]= pennsylvania.map(location => ({ ...location, state: 'PA' }));
 
-const ohioLocations: DropboxLocation[] = ohio.map(location => {
-  return { ...location, state: 'OH' };
-});
-
-const locations = [...michiganLocations, ...ohioLocations];
+const locations = [...michiganLocations, ...ohioLocations, ...pennsylvaniaLocations];
 
 const dropboxLocator: DropboxLocator = {
   filterByCityAndState: (targetCity: string, targetState: string): DropboxLocation[] => {

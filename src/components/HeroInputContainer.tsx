@@ -83,6 +83,7 @@ export class HeroInputContainer extends Component<HeroInputContainerProps> {
             <Dropdown.Header>States</Dropdown.Header>
             <Dropdown.Item href='#' eventKey='1' onSelect={onLookupStateSelect}>MI</Dropdown.Item>
             <Dropdown.Item href='#' eventKey='2' onSelect={onLookupStateSelect}>OH</Dropdown.Item>
+            <Dropdown.Item href='#' eventKey='3' onSelect={onLookupStateSelect}>PA</Dropdown.Item>
           </DropdownButton>
           <InputGroup.Append>
             <Button onClick={this.geocodeAddress} variant='outline-dark'>
