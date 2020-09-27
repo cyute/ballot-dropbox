@@ -12,6 +12,7 @@ export type LocationResponse = {
       lat: number,
       lng: number,
     },
+    placeId: string,
   },
 };
 

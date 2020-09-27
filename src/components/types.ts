@@ -19,6 +19,7 @@ export type Lookup = {
 
 export type Destination = {
   address: string;
+  placeId: string;
   location: google.maps.LatLngLiteral;
 }
 

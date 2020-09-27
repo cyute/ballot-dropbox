@@ -31,7 +31,9 @@ export class MapComponent extends Component<MapProps, MapState> {
         lat={destination.location.lat}
         lng={destination.location.lng}
         color='green'
-        label={destination.address} />
+        address={destination.address}
+        placeId={destination.placeId}
+      />
     )
   }
 
@@ -41,7 +43,7 @@ export class MapComponent extends Component<MapProps, MapState> {
         lat={home.location.lat}
         lng={home.location.lng}
         color='black'
-        label={home.address} />
+        address={home.address} />
     )
   }
 
