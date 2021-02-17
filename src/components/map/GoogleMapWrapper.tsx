@@ -1,18 +1,24 @@
 import React, { Component, CSSProperties } from 'react';
 import GoogleMapReact from 'google-map-react';
 import { MapMarker } from './MapMarker';
-import { Store, Destination, Home } from '../types';
-
-type MapProps = {
-  store: Store;
-}
+import { RootState } from '../../store/types';
+import { connect, ConnectedProps } from 'react-redux';
+import { Destination, Home } from '../../store/map/types';
 
 type MapState = {
   defaultCenter: google.maps.LatLngLiteral;
   defaultZoom: number;
 }
 
-export class MapComponent extends Component<MapProps, MapState> {
+const mapStateToProps = (state: RootState) => ({
+  map: state.map,
+});
+
+const connector = connect(mapStateToProps, {});
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+class GoogleMapWrapper extends Component<PropsFromRedux, MapState> {
 
   public readonly state: Readonly<MapState> = {
     defaultCenter: {
@@ -54,7 +60,8 @@ export class MapComponent extends Component<MapProps, MapState> {
       position: 'fixed',
     };
     const { defaultCenter, defaultZoom } = this.state;
-    const { home, destinations, center, zoom } = this.props.store;
+    const { center, zoom, destinations } = this.props.map;
+    const { home } = this.props.map;
     return (
       <div style={mapStyle}>
         <GoogleMapReact
@@ -71,3 +78,5 @@ export class MapComponent extends Component<MapProps, MapState> {
     );
   }
 }
+
+export default connector(GoogleMapWrapper);

@@ -1,22 +1,24 @@
 import React, { Component } from 'react';
-import { DropboxLocation } from '../../data/types';
 import Form from 'react-bootstrap/Form';
-import { Destination } from '../types';
-import { DropboxLocationsTable } from './DropboxLocationsTable';
+import DropboxLocationsTable from './DropboxLocationsTable';
 import { Disclaimer } from './Disclaimer';
-
-type DropboxLocationsProps = {
-  dropboxLocations: DropboxLocation[];
-  addDestination: (destination: Destination) => void;
-  setSearching: (isSearching: boolean) => void;
-}
+import { RootState } from '../../store/types';
+import { connect, ConnectedProps } from 'react-redux';
 
 type DropboxLocationsState = {
   isOutdoorsOnly: boolean;
   isOpen24Hours: boolean;
 }
 
-export class DropboxLocations extends Component<DropboxLocationsProps, DropboxLocationsState> {
+const mapStateToProps = (state: RootState) => ({
+  dropbox: state.dropbox,
+});
+
+const connector = connect(mapStateToProps, {});
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+class DropboxLocations extends Component<PropsFromRedux, DropboxLocationsState> {
 
   public readonly state: Readonly<DropboxLocationsState> = {
     isOutdoorsOnly: false,
@@ -32,15 +34,15 @@ export class DropboxLocations extends Component<DropboxLocationsProps, DropboxLo
   }
 
   render = (): JSX.Element => {
-    const { dropboxLocations } = this.props;
-    if (dropboxLocations.length === 0) {
+    const { locations } = this.props.dropbox;
+    if (locations.length === 0) {
       return <React.Fragment />;
     }
     return (
       <div className='table-responsive'>
         <div className='float-left'>
           <p className='lead mb-1'>
-           { dropboxLocations[0].city }, { dropboxLocations[0].state }
+           { locations[0].city }, { locations[0].state }
           </p>
         </div>
         <div className='float-right' style={{ lineHeight: '2rem' }}>
@@ -60,14 +62,14 @@ export class DropboxLocations extends Component<DropboxLocationsProps, DropboxLo
           />
         </div>
         <DropboxLocationsTable
-          addDestination={this.props.addDestination}
-          dropboxLocations={dropboxLocations}
-          setSearching={this.props.setSearching}
+          dropboxLocations={locations}
           isOpen24Hours={this.state.isOpen24Hours}
           isOutdoorsOnly={this.state.isOutdoorsOnly}
         />
-        <Disclaimer dropboxLocations={this.props.dropboxLocations} />
+        <Disclaimer dropboxLocations={locations} />
       </div>
     );
   }
 }
+
+export default connector(DropboxLocations);
