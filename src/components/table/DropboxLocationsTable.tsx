@@ -1,40 +1,30 @@
 import React, { Component } from 'react';
-import { DropboxLocation } from '../../data/types';
 import Table from 'react-bootstrap/Table';
-import { Destination } from '../types';
 import { Comment } from './Comment';
 import { InlineIcon } from '@iconify/react';
 import mapMarkedAlt from '@iconify/icons-fa-solid/map-marked-alt';
-import { LocationClient } from '../../data/LocationClient';
+import { DropboxLocation } from '../../store/dropbox/types';
+import { connect, ConnectedProps } from 'react-redux';
+import { RootState } from '../../store/types';
+import { geocodeDropbox } from '../../store/user/thunks';
 
-type DropboxLocationsTableProps = {
+const mapStateToProps = (state: RootState) => ({});
+
+const connector = connect(mapStateToProps, { geocodeDropbox });
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+interface Props extends PropsFromRedux {
   dropboxLocations: DropboxLocation[];
-  addDestination: (destination: Destination) => void;
-  setSearching: (isSearching: boolean) => void;
   isOutdoorsOnly: boolean;
   isOpen24Hours: boolean;
 }
 
-export class DropboxLocationsTable extends Component<DropboxLocationsTableProps> {
-
-  private locationClient: LocationClient;
-
-  constructor(props: DropboxLocationsTableProps) {
-    super(props);
-    this.locationClient = new LocationClient();
-  }
+class DropboxLocationsTable extends Component<Props> {
 
   geocodeAddress = async (location: DropboxLocation): Promise<void> => {
     const address = `${location.address} ${location.city} ${location.state}`;
-    this.props.setSearching(true);
-    const response = await this.locationClient.get(address);
-
-    this.props.setSearching(false);
-    if (response.location) {
-      this.props.addDestination(response.location);
-    } else {
-      // TODO: display not found error
-    }
+    this.props.geocodeDropbox(address);
   }
 
   renderRow = (location: DropboxLocation, index: number): JSX.Element => {
@@ -46,9 +36,9 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps>
         <td>
           <Comment 
             address={address}
-            isOutdoors={isOutdoors}
-            dropoffHours={dropoffHours}
-            comments={comments}
+            isOutdoors={isOutdoors ? isOutdoors : true}
+            dropoffHours={dropoffHours ? dropoffHours : ''}
+            comments={comments ? comments : ''}
           />
         </td>
       </tr>
@@ -86,3 +76,5 @@ export class DropboxLocationsTable extends Component<DropboxLocationsTableProps>
     );
   }
 }
+
+export default connector(DropboxLocationsTable)

@@ -1,10 +1,8 @@
-import React, { Component, Props, CSSProperties } from 'react';
+import React, { Component, CSSProperties } from 'react';
 import './App.css';
-import { MapComponent } from './components/map/Map';
+import GoogleMapWrapper from './components/map/GoogleMapWrapper';
 import { OverlayWrapper } from './components/OverlayWrapper';
-import { HeroInputContainer } from './components/HeroInputContainer';
-import { Home, Store, Destination } from './components/types';
-import DropboxLocator from './data/DropboxLocator';
+import HeroInputContainer from './components/HeroInputContainer';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
@@ -12,102 +10,24 @@ import { InlineIcon } from '@iconify/react';
 import closeIcon from '@iconify/icons-fa-solid/window-close';
 import searchLocationIcon from '@iconify/icons-fa-solid/search-location';
 import questionCircle from '@iconify/icons-fa-solid/question-circle';
+import { connect, ConnectedProps } from 'react-redux';
+import { toggleHeroContainer, closeErrorAlert } from './store/user/actions';
+import { RootState } from './store/types';
 
-type AppState = {
-  store: Store,
-}
+const mapStateToProps = (state: RootState) => ({
+  user: state.user,
+});
 
-class App extends Component<Props<any>, AppState> {
+const connector = connect(mapStateToProps, { toggleHeroContainer, closeErrorAlert });
 
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      store: {
-        lookup: {
-          address: '',
-          state: 'MI',
-        },
-        dropboxLocations: [],
-        destinations: [],
-        isHeroContainerOpen: true,
-        isSearchingForHome: false,
-        isDisplayError: false,
-      },
-    }
-  }
+type PropsFromRedux = ConnectedProps<typeof connector>
 
-  toggleDisplay = (): void => {
-    const store = this.state.store;
-    store.isHeroContainerOpen = !this.state.store.isHeroContainerOpen;
-    this.setState({ store });
-  }
+class App extends Component<PropsFromRedux, {}> {
 
-  onLookupAddressChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const store = this.state.store;
-    store.lookup.address = event.currentTarget.value;
-    this.setState({ store });
-  }
-
-  onLookupStateSelect = (eventKey: any): void => {
-    const store = this.state.store;
-    if (eventKey === '1') {
-      store.lookup.state = 'MI';
-      store.center = { lat: 44.6254027, lng: -84.9069361 };
-      store.zoom = 6;
-    }
-    if (eventKey === '2') {
-      store.lookup.state = 'OH';
-      store.center = { lat: 41.2459212, lng: -82.9121421 };
-      store.zoom = 6;
-    }
-    if (eventKey === '3') {
-      store.lookup.state = 'PA';
-      store.center = { lat: 41.6459212, lng: -77.4121421 };
-      store.zoom = 6;
-    }
-    this.setState({ store });
-  }
-
-  setHome = (home: Home): void => {
-    const store = this.state.store;
-    store.home = home;
-    store.destinations = [];
-    store.dropboxLocations = home.city ? DropboxLocator.filterByCityAndState(home.city, home.state) : [];
-    if (home.location) {
-      store.center = { lat: home.location.lat, lng: home.location.lng };
-      store.zoom = 11;
-    }
-    this.setState({ store });
-  }
-
-  setSearching = (isSearching: boolean): void => {
-    const store = this.state.store;
-    store.isSearchingForHome = isSearching;
-    this.setState({ store });
-  }
-
-  setError = (isDisplayError: boolean): void => {
-    const store = this.state.store;
-    store.isDisplayError = isDisplayError;
-    this.setState({ store });
-  }
-
-  addDestination = (destination: Destination): void => {
-    const store = this.state.store;
-    store.destinations.push(destination);
-    this.setState({ store });
-  }
-
-  clearDropboxLocations = (): void => {
-    const store = this.state.store;
-    store.dropboxLocations = [];
-    this.setState({ store });
-  }
-  
   renderHeroCollapseButton = (): JSX.Element => {
     const style: CSSProperties = { cursor: 'pointer', color: '#333333' };
     return (
-      <div onClick={this.toggleDisplay} className='float-right'>
+      <div onClick={() => this.props.toggleHeroContainer()} className='float-right'>
         <InlineIcon style={style} className='mt-3 mr-2' icon={closeIcon} /> 
       </div>
     );
@@ -115,25 +35,10 @@ class App extends Component<Props<any>, AppState> {
 
   renderHeroExpandButton = (): JSX.Element => {
     return (
-      <Button className='mt-3' variant='dark' size='sm' onClick={this.toggleDisplay}>
+      <Button className='mt-3' variant='dark' size='sm' onClick={() => this.props.toggleHeroContainer()}>
         <InlineIcon icon={searchLocationIcon} /> Open Dropbox Locator
       </Button>
     );
-  }
-
-  renderHero = (): JSX.Element => {
-    return (
-      <HeroInputContainer 
-        store={this.state.store}
-        onLookupAddressChange={this.onLookupAddressChange}
-        onLookupStateSelect={this.onLookupStateSelect}
-        setHome={this.setHome}
-        addDestination={this.addDestination}
-        clearDropboxLocations={this.clearDropboxLocations}
-        setSearching={this.setSearching}
-        setError={this.setError}
-      />
-    )
   }
 
   renderSpinner = (): JSX.Element => {
@@ -148,7 +53,7 @@ class App extends Component<Props<any>, AppState> {
   renderError = (): JSX.Element => {
     const style: CSSProperties = { position: 'fixed', bottom: 5, left: '2%', width: '96%' };
     return (
-      <Alert variant='danger' style={style} onClose={() => this.setError(false)} dismissible>
+      <Alert variant='danger' style={style} onClose={() => this.props.closeErrorAlert()} dismissible>
         We were unable to locate the address or city.  Please try again.
       </Alert>
     );
@@ -164,27 +69,27 @@ class App extends Component<Props<any>, AppState> {
   }
 
   render = (): JSX.Element => {
-    const { isHeroContainerOpen } = this.state.store;
+    const { isHeroContainerOpen, isSearching, isDisplayError } = this.props.user;
     return (
       <React.Fragment>
-        <MapComponent store={this.state.store} />
+        <GoogleMapWrapper />
         <OverlayWrapper>
-          { isHeroContainerOpen && this.renderHero() }
+          { isHeroContainerOpen && <HeroInputContainer /> }
         </OverlayWrapper>
         <OverlayWrapper>
           { isHeroContainerOpen && this.renderHeroCollapseButton() }
           { !isHeroContainerOpen && this.renderHeroExpandButton() }
         </OverlayWrapper>
         <OverlayWrapper>
-          { this.state.store.isSearchingForHome ? this.renderSpinner() : null }
+          { isSearching ? this.renderSpinner() : null }
         </OverlayWrapper>
         <OverlayWrapper>
-          { this.state.store.isDisplayError ? this.renderError() : null }
-          { !this.state.store.isDisplayError ? this.renderFAQLink() : null }
+          { isDisplayError ? this.renderError() : null }
+          { !isDisplayError ? this.renderFAQLink() : null }
         </OverlayWrapper>
       </React.Fragment>
     );
   }
 }
 
-export default App;
+export default connector(App);
