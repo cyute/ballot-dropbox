@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import InputGroup from 'react-bootstrap/InputGroup';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
-import { updateState } from '../store/user/actions';
+import { updateState } from '../store/user/slice';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../store/types';
 

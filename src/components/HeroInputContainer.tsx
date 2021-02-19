@@ -10,8 +10,7 @@ import { LocationClient } from '../data/LocationClient';
 import StateDropdown from './StateDropdown';
 import { RootState } from '../store/types';
 import { connect, ConnectedProps } from 'react-redux';
-import { updateAddress } from '../store/user/actions';
-import { geocodeHome } from '../store/user/thunks';
+import { updateAddress, geocodeHome } from '../store/user/slice';
 
 const mapStateToProps = (state: RootState) => ({
   user: state.user,
