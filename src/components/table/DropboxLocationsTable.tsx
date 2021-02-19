@@ -6,7 +6,7 @@ import mapMarkedAlt from '@iconify/icons-fa-solid/map-marked-alt';
 import { DropboxLocation } from '../../store/dropbox/types';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../../store/types';
-import { geocodeDropbox } from '../../store/user/thunks';
+import { geocodeDropbox } from '../../store/user/slice';
 
 const mapStateToProps = (state: RootState) => ({});
 

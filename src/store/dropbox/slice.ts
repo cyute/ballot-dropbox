@@ -1,7 +1,7 @@
 import { locations } from './data';
+import { createSlice } from '@reduxjs/toolkit'
 import { LocationResponse } from '../../data/types';
-import { USER_ACTION_TYPE } from '../user/actions/actionTypes';
-import { UserAction } from '../user/actions/types';
+import { geocodeHome, updateState } from '../user/slice';
 import { DropboxLocation, DropboxState } from './types';
 
 const initialState: DropboxState = {
@@ -20,21 +20,26 @@ const filterByCityAndState = (targetCity: string, targetState: string): DropboxL
   });
 };
 
-export default function(state: DropboxState = initialState, action: UserAction): DropboxState {
-  switch (action.type) {
-    case USER_ACTION_TYPE.UPDATE_STATE:
-      return { locations: [] }
-    case USER_ACTION_TYPE.FIND_HOME:
-      return { locations: [] }
-    case USER_ACTION_TYPE.FIND_HOME_SUCCESS:
+const dropboxSlice = createSlice({
+  name: 'dropbox',
+  initialState,
+  reducers: {},
+  extraReducers: builder => {
+    builder.addCase(updateState, (state) => {
+      state.locations = [];
+    });
+    builder.addCase(geocodeHome.pending, (state) => {
+      state.locations = [];
+    });
+    builder.addCase(geocodeHome.fulfilled, (state, action) => {
       const home = action.payload as LocationResponse;
       if (home.location) {
-        return {
-          locations: filterByCityAndState(home.location.city, home.location.state),
-        }
+        state.locations = filterByCityAndState(home.location.city, home.location.state);
+      } else {
+        state.locations = [];
       }
-      return { locations: [] }
-    default:
-      return state;
-  }
-};
+    });
+  },
+});
+
+export default dropboxSlice.reducer;

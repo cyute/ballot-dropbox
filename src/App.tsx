@@ -11,14 +11,14 @@ import closeIcon from '@iconify/icons-fa-solid/window-close';
 import searchLocationIcon from '@iconify/icons-fa-solid/search-location';
 import questionCircle from '@iconify/icons-fa-solid/question-circle';
 import { connect, ConnectedProps } from 'react-redux';
-import { toggleHeroContainer, closeErrorAlert } from './store/user/actions';
+import { toggleHero, closeError } from './store/user/slice';
 import { RootState } from './store/types';
 
 const mapStateToProps = (state: RootState) => ({
   user: state.user,
 });
 
-const connector = connect(mapStateToProps, { toggleHeroContainer, closeErrorAlert });
+const connector = connect(mapStateToProps, { toggleHero, closeError });
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 
@@ -27,7 +27,7 @@ class App extends Component<PropsFromRedux, {}> {
   renderHeroCollapseButton = (): JSX.Element => {
     const style: CSSProperties = { cursor: 'pointer', color: '#333333' };
     return (
-      <div onClick={() => this.props.toggleHeroContainer()} className='float-right'>
+      <div onClick={this.props.toggleHero} className='float-right'>
         <InlineIcon style={style} className='mt-3 mr-2' icon={closeIcon} /> 
       </div>
     );
@@ -35,7 +35,7 @@ class App extends Component<PropsFromRedux, {}> {
 
   renderHeroExpandButton = (): JSX.Element => {
     return (
-      <Button className='mt-3' variant='dark' size='sm' onClick={() => this.props.toggleHeroContainer()}>
+      <Button className='mt-3' variant='dark' size='sm' onClick={this.props.toggleHero}>
         <InlineIcon icon={searchLocationIcon} /> Open Dropbox Locator
       </Button>
     );
@@ -53,7 +53,7 @@ class App extends Component<PropsFromRedux, {}> {
   renderError = (): JSX.Element => {
     const style: CSSProperties = { position: 'fixed', bottom: 5, left: '2%', width: '96%' };
     return (
-      <Alert variant='danger' style={style} onClose={() => this.props.closeErrorAlert()} dismissible>
+      <Alert variant='danger' style={style} onClose={this.props.closeError} dismissible>
         We were unable to locate the address or city.  Please try again.
       </Alert>
     );

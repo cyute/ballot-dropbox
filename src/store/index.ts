@@ -1,10 +1,14 @@
-import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
+import { combineReducers } from 'redux';
+import { configureStore } from '@reduxjs/toolkit'
 import thunk from 'redux-thunk';
-import { devToolsEnhancer } from 'redux-devtools-extension';
-import user from './user/reducer';
-import map from './map/reducer';
-import dropbox from './dropbox/reducer';
+import user from './user/slice';
+import map from './map/slice';
+import dropbox from './dropbox/slice';
 
 export const rootReducer = combineReducers({ user, map, dropbox });
 
-export default createStore(rootReducer, compose(applyMiddleware(thunk), devToolsEnhancer({})));
+export default configureStore({
+  reducer: { user, map, dropbox },
+  middleware: [thunk],
+  devTools: true,
+});
