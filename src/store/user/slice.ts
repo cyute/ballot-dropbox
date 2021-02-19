@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, PayloadAction, isPending, isFulfilled, isRejected } from '@reduxjs/toolkit'
 import { LocationClient } from '../../data/LocationClient';
 import { UserState } from './types';
 
@@ -28,6 +28,10 @@ export const geocodeDropbox = createAsyncThunk(
   }
 )
 
+const isPendingAction = isPending(geocodeHome, geocodeDropbox);
+const isFulfilledAction = isFulfilled(geocodeHome, geocodeDropbox);
+const isRejectedAction = isRejected(geocodeHome, geocodeDropbox);
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -46,28 +50,18 @@ const userSlice = createSlice({
     },
   },
   extraReducers: builder => {
-    builder.addCase(geocodeHome.pending, (state, action) => {
-      state.isSearching = true;
-      state.isDisplayError = false;
-    });
     builder.addCase(geocodeHome.fulfilled, (state, action) => {
-      state.isSearching = false;
-      state.isDisplayError = false;
       state.address = '';
     });
-    builder.addCase(geocodeHome.rejected, (state, action) => {
-      state.isSearching = false;
-      state.isDisplayError = true;
-    });
-    builder.addCase(geocodeDropbox.pending, (state, action) => {
+    builder.addMatcher(isPendingAction, (state) => {
       state.isSearching = true;
       state.isDisplayError = false;
     });
-    builder.addCase(geocodeDropbox.fulfilled, (state, action) => {
+    builder.addMatcher(isFulfilledAction, (state) => {
       state.isSearching = false;
       state.isDisplayError = false;
     });
-    builder.addCase(geocodeDropbox.rejected, (state, action) => {
+    builder.addMatcher(isRejectedAction, (state) => {
       state.isSearching = false;
       state.isDisplayError = true;
     });
