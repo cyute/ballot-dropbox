@@ -6,7 +6,6 @@ import Button from 'react-bootstrap/Button';
 import DropboxLocations from './table/DropboxLocations';
 import { Icon } from '@iconify/react';
 import searchIcon from '@iconify/icons-fa-solid/search';
-import { LocationClient } from '../data/LocationClient';
 import StateDropdown from './StateDropdown';
 import { RootState } from '../store/types';
 import { connect, ConnectedProps } from 'react-redux';
@@ -20,16 +19,7 @@ const connector = connect(mapStateToProps, { updateAddress, geocodeHome });
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 
-interface Props extends PropsFromRedux {}
-
-class HeroInputContainer extends Component<Props> {
-
-  private locationClient: LocationClient;
-
-  constructor(props: Props) {
-    super(props);
-    this.locationClient = new LocationClient();
-  }
+class HeroInputContainer extends Component<PropsFromRedux> {
 
   geocodeAddress = async (): Promise<void> => {
     this.props.geocodeHome(`${this.props.user.address}, ${this.props.user.state}`);

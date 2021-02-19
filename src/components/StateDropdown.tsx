@@ -14,9 +14,7 @@ const connector = connect(mapStateToProps, { updateState });
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 
-interface Props extends PropsFromRedux {};
-
-class StateDropdown extends Component<Props> {
+class StateDropdown extends Component<PropsFromRedux> {
 
   render = (): JSX.Element => {
     const { updateState, user } = this.props;
