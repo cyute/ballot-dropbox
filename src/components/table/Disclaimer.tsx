@@ -1,23 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { DropboxLocation } from '../../store/dropbox/types';
 
-type DisclaimerProps = {
+type Props = {
   dropboxLocations: DropboxLocation[];
 }
 
-export class Disclaimer extends Component<DisclaimerProps> {
+export const Disclaimer = ({ dropboxLocations }: Props): JSX.Element => {
 
-  render = (): JSX.Element => {
-    const { dropboxLocations } = this.props;
-    if (dropboxLocations && dropboxLocations.length > 0 && dropboxLocations[0].state === 'MI') {
-      return (
-        <div>
-          <small className='text-danger' style={{ fontWeight: 300 }}>
-            <sup>*</sup> Voters must only use the drop box in their jurisdiction
-          </small>
-        </div>
-      )
-    }
-    return <React.Fragment />;
+  if (dropboxLocations && dropboxLocations.length > 0 && dropboxLocations[0].state === 'MI') {
+    return (
+      <div>
+        <small className='text-danger' style={{ fontWeight: 300 }}>
+          <sup>*</sup> Voters must only use the drop box in their jurisdiction
+        </small>
+      </div>
+    )
   }
-}
+  return <React.Fragment />;
+};

@@ -1,8 +1,8 @@
-import React, { Component, CSSProperties } from 'react';
+import React, { CSSProperties } from 'react';
 import './App.css';
-import GoogleMapWrapper from './components/map/GoogleMapWrapper';
+import { GoogleMapWrapper } from './components/map/GoogleMapWrapper';
 import { OverlayWrapper } from './components/OverlayWrapper';
-import HeroInputContainer from './components/HeroInputContainer';
+import { HeroInputContainer } from './components/HeroInputContainer';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
@@ -10,38 +10,35 @@ import { InlineIcon } from '@iconify/react';
 import closeIcon from '@iconify/icons-fa-solid/window-close';
 import searchLocationIcon from '@iconify/icons-fa-solid/search-location';
 import questionCircle from '@iconify/icons-fa-solid/question-circle';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toggleHero, closeError } from './store/user/slice';
 import { RootState } from './store/types';
+import { UserState } from './store/user/types';
 
-const mapStateToProps = (state: RootState) => ({
-  user: state.user,
-});
+export const App = (): JSX.Element => {
 
-const connector = connect(mapStateToProps, { toggleHero, closeError });
+  const { isHeroContainerOpen, isSearching, isDisplayError } = useSelector<RootState, UserState>(state => state.user);
 
-type PropsFromRedux = ConnectedProps<typeof connector>
-
-class App extends Component<PropsFromRedux, {}> {
-
-  renderHeroCollapseButton = (): JSX.Element => {
+  const HeroCollapseButton = (): JSX.Element => {
+    const dispatch = useDispatch();
     const style: CSSProperties = { cursor: 'pointer', color: '#333333' };
     return (
-      <div onClick={this.props.toggleHero} className='float-right'>
+      <div onClick={() => dispatch(toggleHero())} className='float-right'>
         <InlineIcon style={style} className='mt-3 mr-2' icon={closeIcon} /> 
       </div>
     );
   }
 
-  renderHeroExpandButton = (): JSX.Element => {
+  const HeroExpandButton = (): JSX.Element => {
+    const dispatch = useDispatch();
     return (
-      <Button className='mt-3' variant='dark' size='sm' onClick={this.props.toggleHero}>
+      <Button className='mt-3' variant='dark' size='sm' onClick={() => dispatch(toggleHero())}>
         <InlineIcon icon={searchLocationIcon} /> Open Dropbox Locator
       </Button>
     );
   }
 
-  renderSpinner = (): JSX.Element => {
+  const LoadingSpinner = (): JSX.Element => {
     const style: CSSProperties = { position: 'fixed', top: '47%', left: '47%' };
     return (
       <Spinner style={style} animation='border' role='status'>
@@ -50,16 +47,17 @@ class App extends Component<PropsFromRedux, {}> {
     );
   }
 
-  renderError = (): JSX.Element => {
+  const Error = (): JSX.Element => {
+    const dispatch = useDispatch();
     const style: CSSProperties = { position: 'fixed', bottom: 5, left: '2%', width: '96%' };
     return (
-      <Alert variant='danger' style={style} onClose={this.props.closeError} dismissible>
+      <Alert variant='danger' style={style} onClose={() => dispatch(closeError())} dismissible>
         We were unable to locate the address or city.  Please try again.
       </Alert>
     );
   }
 
-  renderFAQLink = (): JSX.Element => {
+  const FAQLink = (): JSX.Element => {
     const style: CSSProperties = { position: 'fixed', bottom: 5, left: '45%' };
     return (
       <Button variant='dark' size='sm' style={style} onClick={() => window.location.href='/faq.html' }>
@@ -68,28 +66,22 @@ class App extends Component<PropsFromRedux, {}> {
     );
   }
 
-  render = (): JSX.Element => {
-    const { isHeroContainerOpen, isSearching, isDisplayError } = this.props.user;
-    return (
-      <React.Fragment>
-        <GoogleMapWrapper />
-        <OverlayWrapper>
-          { isHeroContainerOpen && <HeroInputContainer /> }
-        </OverlayWrapper>
-        <OverlayWrapper>
-          { isHeroContainerOpen && this.renderHeroCollapseButton() }
-          { !isHeroContainerOpen && this.renderHeroExpandButton() }
-        </OverlayWrapper>
-        <OverlayWrapper>
-          { isSearching ? this.renderSpinner() : null }
-        </OverlayWrapper>
-        <OverlayWrapper>
-          { isDisplayError ? this.renderError() : null }
-          { !isDisplayError ? this.renderFAQLink() : null }
-        </OverlayWrapper>
-      </React.Fragment>
-    );
-  }
+  return (
+    <React.Fragment>
+      <GoogleMapWrapper />
+      <OverlayWrapper>
+        { isHeroContainerOpen ? <HeroInputContainer /> : null }
+      </OverlayWrapper>
+      <OverlayWrapper>
+        { isHeroContainerOpen ? <HeroCollapseButton /> : <HeroExpandButton />}
+      </OverlayWrapper>
+      <OverlayWrapper>
+        { isSearching ? <LoadingSpinner /> : null }
+      </OverlayWrapper>
+      <OverlayWrapper>
+        { isDisplayError ? <Error /> : null }
+        { !isDisplayError ? <FAQLink /> : null }
+      </OverlayWrapper>
+    </React.Fragment>
+  );
 }
-
-export default connector(App);

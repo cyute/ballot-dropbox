@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { Icon, InlineIcon } from '@iconify/react';
@@ -13,28 +13,24 @@ type MapMarkerProps = {
   placeId?: string;
 }
 
-export class MapMarker extends Component<MapMarkerProps> {
+export const MapMarker = ({ address, color, placeId }: MapMarkerProps): JSX.Element => {
 
-  onClick = () => {
-    const { address, placeId } = this.props;
+  const onClick = () => {
     const href = `https://www.google.com/maps/search/?api=1&query=${address}&query_place_id=${placeId}`;
     window.open(href, '_blank');
   }
 
-  render = (): JSX.Element => {
-    const { address, color } = this.props;
-    return (
-      <React.Fragment>
-        <Icon icon={mapMarker} width='1.5em' color={color} />
-        <Card border='dark' className='mt-1' style={{ width: '10rem' }}>
-          <Card.Body style={{ padding: '.4rem' }}>
-            <Card.Text>{address}</Card.Text>
-            <Button variant='dark' size='sm' style={{ fontSize: '1em'}} onClick={this.onClick}>
-              <InlineIcon icon={externalLink} /> Open Location
-            </Button>
-          </Card.Body>
-        </Card>
-      </React.Fragment>
-    );
-  }
-}
+  return (
+    <React.Fragment>
+      <Icon icon={mapMarker} width='1.5em' color={color} />
+      <Card border='dark' className='mt-1' style={{ width: '10rem' }}>
+        <Card.Body style={{ padding: '.4rem' }}>
+          <Card.Text>{address}</Card.Text>
+          <Button variant='dark' size='sm' style={{ fontSize: '1em'}} onClick={onClick}>
+            <InlineIcon icon={externalLink} /> Open Location
+          </Button>
+        </Card.Body>
+      </Card>
+    </React.Fragment>
+  );
+};

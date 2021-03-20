@@ -1,82 +1,52 @@
-import React, { Component, CSSProperties } from 'react';
+import React, { CSSProperties } from 'react';
 import GoogleMapReact from 'google-map-react';
-import { MapMarker } from './MapMarker';
 import { RootState } from '../../store/types';
-import { connect, ConnectedProps } from 'react-redux';
-import { Destination, Home } from '../../store/map/types';
+import { useSelector } from 'react-redux';
+import { HomeMarker } from './HomeMarker';
+import { DestinationMarker } from './DestinationMarker';
+import { MapState } from '../../store/map/types';
 
-type MapState = {
-  defaultCenter: google.maps.LatLngLiteral;
-  defaultZoom: number;
-}
+export const GoogleMapWrapper = (): JSX.Element => {
 
-const mapStateToProps = (state: RootState) => ({
-  map: state.map,
-});
+  const defaultCenter = {
+    lat: 44.6254027,
+    lng: -84.9069361,
+  };
+  const defaultZoom =  6;
 
-const connector = connect(mapStateToProps, {});
+  const googleApiKey = process.env['REACT_APP_GOOGLE_API_KEY'] || '';
 
-type PropsFromRedux = ConnectedProps<typeof connector>
-
-class GoogleMapWrapper extends Component<PropsFromRedux, MapState> {
-
-  public readonly state: Readonly<MapState> = {
-    defaultCenter: {
-      lat: 44.6254027,
-      lng: -84.9069361,
-    },
-    defaultZoom: 6,
+  const mapStyle: CSSProperties = {
+    height: '100vh',
+    width: '100%',
+    position: 'fixed',
   };
 
-  private googleApiKey: string = process.env['REACT_APP_GOOGLE_API_KEY'] || '';
+  const { destinations, home, center, zoom } = useSelector<RootState, MapState>(state => state.map);
 
-  renderDestinationMarker = (destination: Destination, index: number): JSX.Element => {
-    return (
-      <MapMarker
-        key={index}
-        lat={destination.location.lat}
-        lng={destination.location.lng}
-        color='green'
-        address={destination.address}
-        placeId={destination.placeId}
-      />
-    )
-  }
-
-  renderHomeMarker = (home: Home): JSX.Element => {
-    return (
-      <MapMarker
-        lat={home.location.lat}
-        lng={home.location.lng}
-        color='black'
-        address={home.address} />
-    )
-  }
-
-  render = (): JSX.Element => {
-    const mapStyle: CSSProperties = {
-      height: '100vh',
-      width: '100%',
-      position: 'fixed',
-    };
-    const { defaultCenter, defaultZoom } = this.state;
-    const { center, zoom, destinations } = this.props.map;
-    const { home } = this.props.map;
-    return (
-      <div style={mapStyle}>
-        <GoogleMapReact
-          bootstrapURLKeys={{ key: this.googleApiKey }}
-          defaultCenter={defaultCenter}
-          defaultZoom={defaultZoom}
-          zoom={zoom ? zoom : defaultZoom}
-          center={center}
-        >
-          {home && home.location && this.renderHomeMarker(home)}
-          {destinations.map((destination, index) => this.renderDestinationMarker(destination, index))}
-        </GoogleMapReact>
-      </div>
-    );
-  }
-}
-
-export default connector(GoogleMapWrapper);
+  return (
+    <div style={mapStyle}>
+      <GoogleMapReact
+        bootstrapURLKeys={{ key: googleApiKey }}
+        defaultCenter={defaultCenter}
+        defaultZoom={defaultZoom}
+        zoom={zoom ? zoom : defaultZoom}
+        center={center}
+      >
+        {home?.location && <HomeMarker address={home.address} lat={home.location.lat} lng={home.location.lng} />}
+        {
+          destinations.map((destination, index) => {
+            return (
+              <DestinationMarker
+                key={index}
+                address={destination.address}
+                lat={destination.location.lat}
+                lng={destination.location.lng}
+                placeId={destination.placeId} />
+            );
+          })
+        }
+      </GoogleMapReact>
+    </div>
+  );
+};
