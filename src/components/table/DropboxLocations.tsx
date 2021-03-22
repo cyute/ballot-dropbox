@@ -4,22 +4,48 @@ import { DropboxLocationsTable } from './DropboxLocationsTable';
 import { Disclaimer } from './Disclaimer';
 import { RootState } from '../../store/types';
 import { useSelector } from 'react-redux';
-import { DropboxState } from '../../store/dropbox/types';
+import { UserState } from '../../store/user/types';
+import { useGeocodeHome } from '../../query/geocode';
+import { DropboxLocation  } from '../../data/types';
+import { locations } from '../../data';
 
 export const DropboxLocations = (): JSX.Element => {
 
   const [isOutdoorsOnly, setOutdoorsOnly] = useState(false);
   const [isOpen24Hours, setOpen24Hours] = useState(false);
-  const { locations } = useSelector<RootState, DropboxState>(state => state.dropbox);
+  
+  const { home } = useSelector<RootState, UserState>(state => state.user);
+  const { data } = useGeocodeHome(home);
 
-  if (locations.length === 0) {
+  const filterByCityAndState = (targetCity: string, targetState: string): DropboxLocation[] => {
+    return locations.filter(({jurisdiction, city, state}) => {
+      if (targetCity === city && targetState === state) {
+        return true;
+      }
+      if (targetCity === jurisdiction && targetState === state) {
+        return true;
+      }
+      return false;
+    });
+  };
+
+  const getDropboxLocations = (): DropboxLocation[] => {
+    if (data?.location) {
+       return filterByCityAndState(data.location?.city, data.location?.state);
+    }
+    return [];
+  }
+
+  const dropboxLocations = getDropboxLocations();
+
+  if (dropboxLocations.length === 0) {
     return <React.Fragment />;
   }
   return (
     <div className='table-responsive'>
       <div className='float-left'>
         <p className='lead mb-1'>
-          { locations[0].city }, { locations[0].state }
+          { dropboxLocations[0].city }, { dropboxLocations[0].state }
         </p>
       </div>
       <div className='float-right' style={{ lineHeight: '2rem' }}>
@@ -39,11 +65,11 @@ export const DropboxLocations = (): JSX.Element => {
         />
       </div>
       <DropboxLocationsTable
-        dropboxLocations={locations}
+        dropboxLocations={dropboxLocations}
         isOpen24Hours={isOpen24Hours}
         isOutdoorsOnly={isOutdoorsOnly}
       />
-      <Disclaimer dropboxLocations={locations} />
+      <Disclaimer dropboxLocations={dropboxLocations} />
     </div>
   );
 };

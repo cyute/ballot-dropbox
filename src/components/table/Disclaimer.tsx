@@ -1,5 +1,5 @@
 import React from 'react';
-import { DropboxLocation } from '../../store/dropbox/types';
+import { DropboxLocation } from '../../data/types';
 
 type Props = {
   dropboxLocations: DropboxLocation[];

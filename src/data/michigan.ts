@@ -1,4 +1,4 @@
-import { DropboxLocation } from "../types";
+import { DropboxLocation } from './types';
 
 export const michigan: Omit<DropboxLocation, 'state'>[] = [
   {

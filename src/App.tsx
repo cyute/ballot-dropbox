@@ -1,8 +1,7 @@
 import React, { CSSProperties } from 'react';
-import './App.css';
 import { GoogleMapWrapper } from './components/map/GoogleMapWrapper';
-import { OverlayWrapper } from './components/OverlayWrapper';
-import { HeroInputContainer } from './components/HeroInputContainer';
+import { OverlayWrapper } from './components/util/OverlayWrapper';
+import { HeroInputContainer } from './components/input/HeroInputContainer';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
@@ -14,10 +13,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toggleHero, closeError } from './store/user/slice';
 import { RootState } from './store/types';
 import { UserState } from './store/user/types';
+import { useGeocodeHome, useGeocodeLocations } from './query/geocode';
 
 export const App = (): JSX.Element => {
 
-  const { isHeroContainerOpen, isSearching, isDisplayError } = useSelector<RootState, UserState>(state => state.user);
+  const { isHeroContainerOpen, home, locations } = useSelector<RootState, UserState>(state => state.user);
+  const { isFetching, isError } = useGeocodeHome(home);
+  const results = useGeocodeLocations(locations);
+  const isFetchingLocations = results.some(result => result.isFetching);
 
   const HeroCollapseButton = (): JSX.Element => {
     const dispatch = useDispatch();
@@ -76,11 +79,10 @@ export const App = (): JSX.Element => {
         { isHeroContainerOpen ? <HeroCollapseButton /> : <HeroExpandButton />}
       </OverlayWrapper>
       <OverlayWrapper>
-        { isSearching ? <LoadingSpinner /> : null }
+        { isFetching || isFetchingLocations ? <LoadingSpinner /> : null }
       </OverlayWrapper>
       <OverlayWrapper>
-        { isDisplayError ? <Error /> : null }
-        { !isDisplayError ? <FAQLink /> : null }
+        { isError ? <Error /> : <FAQLink /> }
       </OverlayWrapper>
     </React.Fragment>
   );

@@ -3,9 +3,9 @@ import Table from 'react-bootstrap/Table';
 import { Comment } from './Comment';
 import { InlineIcon } from '@iconify/react';
 import mapMarkedAlt from '@iconify/icons-fa-solid/map-marked-alt';
-import { DropboxLocation } from '../../store/dropbox/types';
 import { useDispatch } from 'react-redux';
-import { geocodeDropbox } from '../../store/user/slice';
+import { addLocation } from '../../store/user/slice';
+import { DropboxLocation } from '../../data/types';
 
 type Props = {
   dropboxLocations: DropboxLocation[];
@@ -19,7 +19,7 @@ export const DropboxLocationsTable = ({ dropboxLocations, isOutdoorsOnly, isOpen
 
   const geocodeAddress = async (location: DropboxLocation): Promise<void> => {
     const address = `${location.address} ${location.city} ${location.state}`;
-    dispatch(geocodeDropbox(address));
+    dispatch(addLocation(address));
   }
 
   type RowProps = {
