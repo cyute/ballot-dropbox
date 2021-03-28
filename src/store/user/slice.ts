@@ -16,9 +16,6 @@ const userSlice = createSlice({
     toggleHero(state) {
       state.isHeroContainerOpen = !state.isHeroContainerOpen;
     },
-    closeError(state) {
-      // state.isDisplayError = false;
-    },
     updateState(state, action: PayloadAction<string>) {
       state.state = action.payload;
       state.home = '';
@@ -31,6 +28,10 @@ const userSlice = createSlice({
       state.home = `${state.address}, ${state.state}`;
       state.locations = [];
     },
+    clearHome(state) {
+      state.home = '';
+      state.locations = [];
+    },
     addLocation(state, action: PayloadAction<string>) {
       state.locations.push(action.payload);
     }
@@ -39,10 +40,10 @@ const userSlice = createSlice({
 
 export const { 
   toggleHero,
-  closeError,
   updateState,
   updateAddress,
   updateHome,
+  clearHome,
   addLocation,
 } = userSlice.actions;
 

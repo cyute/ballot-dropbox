@@ -11,22 +11,26 @@ const getLocation = async (address: string): Promise<LocationResponse | Error> =
     const { data } = await Axios.get<LocationResponse>(url);
     return data;
   } catch (error) {
-    console.error('Location not Found', error);
-    throw new Error('Location Not Found');
+    throw new Error(`Location Not Found: ${error.message}`);
   }
 }
 
+const getQueryOptions = (location: string) => ({
+  enabled: !!location,
+  staleTime: Infinity,
+  retry: 1,
+  refetchOnWindowFocus: false,
+});
+
 export const useGeocodeHome = (home: string): UseQueryResult<LocationResponse, Error> => {
-  const queryOptions = { enabled: !!home, staleTime: Infinity };
-  return useQuery(['home', home], () => getLocation(home), queryOptions);
+  return useQuery(['home', home], () => getLocation(home), getQueryOptions(home));
 }
 
 export const useGeocodeLocations = (locations: string[]): UseQueryResult<unknown, unknown>[] => {
   const queries = locations.map(location => ({
     queryKey: ['location', location],
     queryFn: () => getLocation(location),
-    enabled: !!location,
-    staleTime: Infinity,
+    ...getQueryOptions(location),
   }));
   return useQueries(queries);
 }

@@ -10,17 +10,24 @@ import closeIcon from '@iconify/icons-fa-solid/window-close';
 import searchLocationIcon from '@iconify/icons-fa-solid/search-location';
 import questionCircle from '@iconify/icons-fa-solid/question-circle';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleHero, closeError } from './store/user/slice';
+import { toggleHero, clearHome } from './store/user/slice';
 import { RootState } from './store/types';
 import { UserState } from './store/user/types';
-import { useGeocodeHome, useGeocodeLocations } from './query/geocode';
+import { useGeocodeHome } from './query/geocode';
+import { useIsFetching, useQueryClient } from 'react-query';
 
 export const App = (): JSX.Element => {
 
-  const { isHeroContainerOpen, home, locations } = useSelector<RootState, UserState>(state => state.user);
-  const { isFetching, isError } = useGeocodeHome(home);
-  const results = useGeocodeLocations(locations);
-  const isFetchingLocations = results.some(result => result.isFetching);
+  const { isHeroContainerOpen, home } = useSelector<RootState, UserState>(state => state.user);
+  const isFetching = useIsFetching();
+  const { isError } = useGeocodeHome(home);
+  const queryClient = useQueryClient();
+  const dispatch = useDispatch();
+
+  const closeError = () => {
+    dispatch(clearHome());
+    queryClient.resetQueries(['home', home]);
+  }
 
   const HeroCollapseButton = (): JSX.Element => {
     const dispatch = useDispatch();
@@ -51,10 +58,9 @@ export const App = (): JSX.Element => {
   }
 
   const Error = (): JSX.Element => {
-    const dispatch = useDispatch();
     const style: CSSProperties = { position: 'fixed', bottom: 5, left: '2%', width: '96%' };
     return (
-      <Alert variant='danger' style={style} onClose={() => dispatch(closeError())} dismissible>
+      <Alert variant='danger' style={style} onClose={() => closeError()} dismissible>
         We were unable to locate the address or city.  Please try again.
       </Alert>
     );
@@ -79,7 +85,7 @@ export const App = (): JSX.Element => {
         { isHeroContainerOpen ? <HeroCollapseButton /> : <HeroExpandButton />}
       </OverlayWrapper>
       <OverlayWrapper>
-        { isFetching || isFetchingLocations ? <LoadingSpinner /> : null }
+        { isFetching ? <LoadingSpinner /> : null }
       </OverlayWrapper>
       <OverlayWrapper>
         { isError ? <Error /> : <FAQLink /> }
